@@ -1,1 +1,12 @@
 D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\bin\Debug\TheServer.exe.config
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\bin\Debug\TheServer.exe
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\bin\Debug\TheServer.pdb
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\bin\Debug\NetComm.dll
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\bin\Debug\tcpServer.dll
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\bin\Debug\tcpServer.pdb
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\obj\Debug\TheServer.csprojResolveAssemblyReference.cache
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\obj\Debug\TheServer.Form1.resources
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\obj\Debug\TheServer.Properties.Resources.resources
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\obj\Debug\TheServer.csproj.GenerateResource.Cache
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\obj\Debug\TheServer.exe
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\obj\Debug\TheServer.pdb
