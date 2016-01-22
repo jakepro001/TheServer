@@ -33,7 +33,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnSend = new System.Windows.Forms.Button();
-            this.btnClose = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.lblConnected = new System.Windows.Forms.Label();
@@ -45,28 +44,28 @@
             this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLog.Location = new System.Drawing.Point(12, 343);
+            this.txtLog.Location = new System.Drawing.Point(412, 385);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(664, 105);
+            this.txtLog.Size = new System.Drawing.Size(267, 105);
             this.txtLog.TabIndex = 1;
             // 
             // txtText
             // 
             this.txtText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtText.Location = new System.Drawing.Point(15, 467);
+            this.txtText.Location = new System.Drawing.Point(412, 509);
             this.txtText.Multiline = true;
             this.txtText.Name = "txtText";
             this.txtText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtText.Size = new System.Drawing.Size(583, 27);
+            this.txtText.Size = new System.Drawing.Size(186, 27);
             this.txtText.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 327);
+            this.label1.Location = new System.Drawing.Point(409, 369);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(25, 13);
             this.label1.TabIndex = 2;
@@ -76,7 +75,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 451);
+            this.label2.Location = new System.Drawing.Point(409, 493);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(79, 13);
             this.label2.TabIndex = 3;
@@ -85,7 +84,7 @@
             // btnSend
             // 
             this.btnSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSend.Location = new System.Drawing.Point(604, 467);
+            this.btnSend.Location = new System.Drawing.Point(604, 509);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 27);
             this.btnSend.TabIndex = 21;
@@ -93,44 +92,33 @@
             this.btnSend.UseVisualStyleBackColor = true;
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
-            // btnClose
-            // 
-            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(601, 529);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 22;
-            this.btnClose.Text = "Close";
-            this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
-            // 
             // label4
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 542);
+            this.label4.Location = new System.Drawing.Point(409, 539);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(94, 13);
+            this.label4.Size = new System.Drawing.Size(74, 13);
             this.label4.TabIndex = 23;
-            this.label4.Text = "TCP server status:";
+            this.label4.Text = "Server Status:";
             // 
             // lblStatus
             // 
             this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblStatus.AutoSize = true;
             this.lblStatus.BackColor = System.Drawing.Color.Red;
-            this.lblStatus.Location = new System.Drawing.Point(112, 542);
+            this.lblStatus.Location = new System.Drawing.Point(480, 539);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(96, 13);
+            this.lblStatus.Size = new System.Drawing.Size(79, 13);
             this.lblStatus.TabIndex = 24;
-            this.lblStatus.Text = "PORT NOT OPEN";
+            this.lblStatus.Text = "Server is Down";
             // 
             // lblConnected
             // 
             this.lblConnected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblConnected.AutoSize = true;
             this.lblConnected.BackColor = System.Drawing.SystemColors.Control;
-            this.lblConnected.Location = new System.Drawing.Point(337, 539);
+            this.lblConnected.Location = new System.Drawing.Point(666, 539);
             this.lblConnected.Name = "lblConnected";
             this.lblConnected.Size = new System.Drawing.Size(13, 13);
             this.lblConnected.TabIndex = 32;
@@ -140,7 +128,7 @@
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(236, 539);
+            this.label9.Location = new System.Drawing.Point(565, 539);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(95, 13);
             this.label9.TabIndex = 31;
@@ -155,7 +143,6 @@
             this.Controls.Add(this.label9);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -163,15 +150,15 @@
             this.Controls.Add(this.txtLog);
             this.MinimumSize = new System.Drawing.Size(696, 461);
             this.Name = "Form1";
-            this.Text = "TCP Server Simulator";
+            this.Text = "The Server";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMain_FormClosed);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
-            }
-        
+        }
+
 
         #endregion
 
@@ -180,7 +167,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnSend;
-        private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Label lblConnected;

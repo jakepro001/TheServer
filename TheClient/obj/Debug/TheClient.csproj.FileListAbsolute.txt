@@ -7,3 +7,12 @@ D:\vi_ta_nuo_va\app\Latest\ServerClient\TheClient\obj\Debug\TheClient.csproj.Gen
 D:\vi_ta_nuo_va\app\Latest\ServerClient\TheClient\obj\Debug\TheClient.exe
 D:\vi_ta_nuo_va\app\Latest\ServerClient\TheClient\obj\Debug\TheClient.pdb
 D:\vi_ta_nuo_va\app\Latest\ServerClient\TheClient\obj\Debug\TheClient.ClientPage.resources
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheClient\bin\Debug\TheClient.exe.config
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheClient\obj\Debug\TheClient.exe
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheClient\obj\Debug\TheClient.pdb
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheClient\bin\Debug\TheClient.exe
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheClient\bin\Debug\TheClient.pdb
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheClient\obj\Debug\TheClient.csprojResolveAssemblyReference.cache
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheClient\obj\Debug\TheClient.ClientPage.resources
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheClient\obj\Debug\TheClient.Properties.Resources.resources
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheClient\obj\Debug\TheClient.csproj.GenerateResource.Cache

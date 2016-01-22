@@ -83,7 +83,10 @@ namespace TheClient
         
         private void SendBtn_Click(object sender, EventArgs e)
         {
-            SendLoop(MsgTxtBx.Text);
+            if (MsgTxtBx.Text != null)
+            {
+                SendLoop(MsgTxtBx.Text);
+            }
         }
 
         private void SendLoop(string text)

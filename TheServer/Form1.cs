@@ -15,9 +15,7 @@ using System.Net;
 namespace TheServer
 {
     public partial class Form1 : Form
-    {
-        //Server server;
-        //ClientInfo client;
+    {        
 
         private byte[] _buffer = new byte[1024];
 
@@ -26,11 +24,14 @@ namespace TheServer
         private List<Socket> _clientSockets = new List<Socket>();
 
         public delegate void invokeDelegate();
+
         public Form1()
         {
             InitializeComponent();
         }
 
+
+        /*
 
         /*
         //[code:Red corona]
@@ -122,63 +123,104 @@ namespace TheServer
 
         #endregion
 
+        
+
         */
 
         /// <summary>
         /// The Server Side
         /// </summary>
         #region The Server
-        
+
         private void StartServer()
         {
-           
-            logCall(false, "Setting up server");           
 
-            _serverSocket.Bind(new IPEndPoint(IPAddress.Any, 100));
-            _serverSocket.Listen(5);
+            logCall(false, "Setting up server");
+            try
+            {
+                _serverSocket.Bind(new IPEndPoint(IPAddress.Any, 100));
+                _serverSocket.Listen(5);
+                _serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), null);
 
-            _serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), null);
+
+                logCall(false, "Server is up");
+                lblStatus.Text = "Server is Up";
+                lblStatus.BackColor = Color.Lime;
+
+            }
+            catch (Exception ex)
+            {
+                lblStatus.Text = "Server is Down";
+                lblStatus.BackColor = Color.Red;
+                logCall(false, "Server is down");
+                logCall(false, ex.Message);
+            }
 
         }
 
         private void AcceptCallback(IAsyncResult ar)
         {
-            Socket socket = _serverSocket.EndAccept(ar);
-            _clientSockets.Add(socket);
-            socket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
-            _serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), null);
+            try
+            {
+                Socket socket = _serverSocket.EndAccept(ar);
+                _clientSockets.Add(socket);
+                socket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
+                _serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), null);
+
+                logCall(false, "Client Connected");
+                lblConUpdate(true);
+            }
+            catch(Exception ex)
+            {
+                logCall(false, "Client Cannot Connect");
+                logCall(false, ex.Message);
+            }
         }
 
         private void ReceiveCallback(IAsyncResult ar)
         {
-            Socket socket = (Socket)ar.AsyncState;
-            int received = socket.EndReceive(ar);
-
-            byte[] dataBuf = new byte[received];
-            Array.Copy(_buffer, dataBuf, received);
-
-            string text = Encoding.ASCII.GetString(dataBuf);
-
-            logCall(false, text);
-
-            if(text.ToLower() == "get time")
-            {
-                byte[] data = Encoding.ASCII.GetBytes(DateTime.Now.ToLongTimeString());
-                socket.BeginSend(data, 0, data.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
-            }
-            else
-            {
-                byte[] data = Encoding.ASCII.GetBytes("Ack");
-                socket.BeginSend(data, 0, data.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
-            }
-
             try
             {
+                Socket socket = (Socket)ar.AsyncState;
+                int received = socket.EndReceive(ar);
+
+                byte[] dataBuf = new byte[received];
+                Array.Copy(_buffer, dataBuf, received);
+
+                string text = Encoding.ASCII.GetString(dataBuf);
+                logCall(false, text);
+
+
+
+                byte[] data;
+
+                if (text.ToLower() == "get time")
+                {
+                    logCall(true, DateTime.Now.ToLongTimeString());
+                    data = Encoding.ASCII.GetBytes(DateTime.Now.ToLongTimeString());                   
+                }
+                else if (text.ToLower() == "initialize")
+                {
+                    logCall(true, "Done");
+                    data = Encoding.ASCII.GetBytes("Done");
+                }
+                else
+                {
+                    logCall(true, "Ack");
+                    data = Encoding.ASCII.GetBytes("Ack");
+                    
+                }
+
+
+                //Sending the data back
+                socket.BeginSend(data, 0, data.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
                 socket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logCall(false, "Client Disconnected");
+                logCall(false, ex.Message);
+                lblConUpdate(false);
             }
 
 
@@ -192,6 +234,18 @@ namespace TheServer
 
         #endregion
 
+
+        /// <summary>
+        /// The DataBase Controllers
+        /// </summary>
+        #region The DataBase
+
+
+
+
+
+
+        #endregion
 
         /// <summary>
         /// The Contols For UI
@@ -222,6 +276,33 @@ namespace TheServer
             txtLog.ScrollToCaret();
         }
 
+        //For No: of client connected label
+        public void lblConUpdate(bool connected)
+        {
+            invokeDelegate del = () =>
+            {
+                lblUpdatDelCall(connected);
+            };
+            Invoke(del);
+        }
+        public void lblUpdatDelCall(bool connected)
+        {
+            string temp = lblConnected.Text;
+            int n = Int32.Parse(temp);
+            if (connected == true)
+            {
+                n += 1;
+            }
+            else
+            {
+                n -= 1;
+            }
+            lblConnected.Text = n.ToString();
+        }
+
+    
+    
+
         #endregion
 
 
@@ -236,9 +317,7 @@ namespace TheServer
         private void frmMain_Load(object sender, EventArgs e)
         {
             StartServer();
-        }
-
-        
+        }       
 
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -254,11 +333,7 @@ namespace TheServer
         {
             //send();
         }
-
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-
-        }
+        
 
 
         #endregion
