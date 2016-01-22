@@ -10,3 +10,4 @@ D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\bin\Debu
 D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\bin\Debug\tcpServer.pdb
 D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\obj\Debug\TheServer.exe
 D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\obj\Debug\TheServer.pdb
+D:\vi_ta_nuo_va\The_Mini_Project\Ours\Server\GitHub\TheServer\TheServer\bin\Debug\SQLite.NET.dll

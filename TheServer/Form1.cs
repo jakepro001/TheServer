@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using RedCorona.Net;
 using System.Net;
+using Finisar.SQLite;
 
 namespace TheServer
 {
@@ -24,6 +25,11 @@ namespace TheServer
         private List<Socket> _clientSockets = new List<Socket>();
 
         public delegate void invokeDelegate();
+
+        //db section
+        SQLiteConnection sqlite_conn;
+        SQLiteCommand sqlite_cmd;
+        SQLiteDataReader sqlite_datareader;
 
         public Form1()
         {
@@ -241,9 +247,129 @@ namespace TheServer
         #region The DataBase
 
 
+        public void createDatabase()
+        {
+            try
+            {
+                if (!File.Exists("database.db"))
+                {
+                    // create a new database connection:
+                    sqlite_conn = new SQLiteConnection("Data Source=database.db;Version=3;New=True;Compress=True;");
+                    CreateTableBtn.Enabled = true;
+                    CreateDbBtn.Enabled = false;
+                }
+                else
+                {
+                    sqlite_conn = new SQLiteConnection("Data Source=database.db;Version=3;New=False;Compress=True;");
+                    CreateTableBtn.Enabled = false;
+                    CreateDbBtn.Enabled = false;
+                }
+
+                logCall(false, "Created DB ");
+            }
+            catch(Exception ex)
+            {
+                logCall(false, ex.Message);
+            }
+        }
+
+        public void ConnectToSql()
+        {
+
+            try
+            {
+                // open the connection:
+                sqlite_conn.Open();
+
+                // create a new SQL command:
+                sqlite_cmd = sqlite_conn.CreateCommand();
+
+                ConnectSqlBtn.Enabled = false;
+
+                logCall(false, "DB Connection established");
+            }
+            catch(Exception ex)
+            {
+                logCall(false, ex.Message);
+            }
+
+
+        }
+
+        public void CreateTable(string name)
+        {
+
+            // Let the SQLiteCommand object know our SQL-Query:
+            sqlite_cmd.CommandText = "CREATE TABLE test (id integer primary key, text varchar(100));";
+
+            // Now lets execute the SQL ;D
+            sqlite_cmd.ExecuteNonQuery();
+        }        
+
+        public void Insertion()
+        {
+            // Lets insert something into our new table:
+            sqlite_cmd.CommandText = "INSERT INTO test (id, text) VALUES (1, 'Test Text 1');";
+
+            // And execute this again ;D
+            sqlite_cmd.ExecuteNonQuery();
+
+            // ...and inserting another line:
+            sqlite_cmd.CommandText = "INSERT INTO test (id, text) VALUES (2, 'Test Text 2');";
+
+            // And execute this again ;D
+            sqlite_cmd.ExecuteNonQuery();
+        }
+
+        public void displaySql()
+        {
+
+            //sqlite_cmd = new SQLiteCommand();
+
+            using (sqlite_cmd)
+            {
+                
+                //sqlite_cmd = new SQLiteCommand();
+                // First lets build a SQL-Query again:
+                sqlite_cmd.CommandText = "SELECT * FROM test";
+
+                sqlite_cmd.CommandTimeout = 30;
+
+                sqlite_cmd.CommandType = CommandType.Text;
+
+                // Now the SQLiteCommand object can give us a DataReader-Object:
+                sqlite_datareader = sqlite_cmd.ExecuteReader();
+
+                // The SQLiteDataReader allows us to run through the result lines:
+                while (sqlite_datareader.Read()) // Read() returns true if there is still a result line to read
+                {
+                    // Print out the content of the text field:
+                    System.Console.WriteLine(sqlite_datareader["text"]);
+                    MessageBox.Show(sqlite_datareader["text"].ToString());
+                }
 
 
 
+
+                // We are ready, now lets cleanup and close our connection:
+                sqlite_conn.Close();
+                //sqlite_conn.Open();
+
+                logCall(false, "Complete");
+
+            }
+
+            
+
+            
+
+        }
+
+        public void CloseSqlConnection()
+        {
+           // We are ready, now lets cleanup and close our connection:
+           sqlite_conn.Close();
+        }
 
         #endregion
 
@@ -300,8 +426,8 @@ namespace TheServer
             lblConnected.Text = n.ToString();
         }
 
-    
-    
+
+
 
         #endregion
 
@@ -314,6 +440,7 @@ namespace TheServer
         /// <param name="e"></param>
         #region Event Handlers
 
+        #region Form Events
         private void frmMain_Load(object sender, EventArgs e)
         {
             StartServer();
@@ -327,15 +454,54 @@ namespace TheServer
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
            
-        }       
+        }
+        #endregion
 
+        #region ServerEvents
         private void btnSend_Click(object sender, EventArgs e)
         {
             //send();
         }
-        
 
+        #endregion        
+
+        #region Database events
+
+        private void ConnectSqlBtn_Click(object sender, EventArgs e)
+        {
+            ConnectToSql();
+        }
+        private void CreateTableBtn_Click(object sender, EventArgs e)
+        {
+            CreateTable("");
+        }
+
+        private void InsertionBtn_Click(object sender, EventArgs e)
+        {
+            Insertion();
+        }
+
+        private void DisplayBtn_Click(object sender, EventArgs e)
+        {
+            createDatabase();
+            ConnectToSql();
+            displaySql();
+        }
+
+        private void CloseSqlBtn_Click(object sender, EventArgs e)
+        {
+            CloseSqlConnection();
+        }
+
+        private void CreateDbBtn_Click(object sender, EventArgs e)
+        {
+            createDatabase();
+        }
 
         #endregion
+
+        #endregion
+
+
     }
 }
