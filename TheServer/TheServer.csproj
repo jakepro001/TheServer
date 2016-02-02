@@ -95,6 +95,30 @@
   <ItemGroup>
     <Content Include="ExternelLibraries\tcpServer.dll" />
     <Content Include="ExternelLibraries\tcpServer.pdb" />
+    <None Include="Resources\whitebox2.jpg" />
+    <None Include="Resources\whitebox1.jpg" />
+    <None Include="Resources\whitebox.jpg" />
+    <None Include="Resources\username.jpg" />
+    <None Include="Resources\searchFinal.jpg" />
+    <None Include="Resources\search-12-xxl.png" />
+    <None Include="Resources\Screenshot %2823%29.png" />
+    <None Include="Resources\plus1.png" />
+    <None Include="Resources\plus.png" />
+    <None Include="Resources\magnifying.png" />
+    <None Include="Resources\login1.jpg" />
+    <None Include="Resources\login.jpg" />
+    <None Include="Resources\lock1.png" />
+    <None Include="Resources\keyhole.jpg" />
+    <None Include="Resources\IMG-20160125-WA0006.jpg" />
+    <None Include="Resources\eye1.jpg" />
+    <None Include="Resources\eye.jpg" />
+    <None Include="Resources\dashboard.jpg" />
+    <None Include="Resources\bord5.jpg" />
+    <None Include="Resources\bord4.jpg" />
+    <None Include="Resources\bord3.jpg" />
+    <None Include="Resources\bord2.jpg" />
+    <None Include="Resources\bord1.jpg" />
+    <None Include="Resources\bord.jpg" />
     <None Include="Resources\B.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

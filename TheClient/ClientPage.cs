@@ -40,7 +40,7 @@ namespace TheClient
                     {
                         attempts++;
                         _clientSocket.Connect(IPAddress.Loopback, 100);
-                        msg("Client Connected...");
+                        msg("Server Connected...");
                     }
                     catch
                     {

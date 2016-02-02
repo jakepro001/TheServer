@@ -34,7 +34,7 @@
             this.LogLstBx = new System.Windows.Forms.ListBox();
             this.MsgTxtBx = new System.Windows.Forms.TextBox();
             this.SendBtn = new System.Windows.Forms.Button();
-            this.DisconnectBtn = new System.Windows.Forms.Button();
+            this.DeviceListBx = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // ConnectBtn
@@ -68,7 +68,7 @@
             this.LogLstBx.HorizontalScrollbar = true;
             this.LogLstBx.Location = new System.Drawing.Point(22, 161);
             this.LogLstBx.Name = "LogLstBx";
-            this.LogLstBx.Size = new System.Drawing.Size(557, 286);
+            this.LogLstBx.Size = new System.Drawing.Size(437, 286);
             this.LogLstBx.TabIndex = 2;
             // 
             // MsgTxtBx
@@ -92,33 +92,28 @@
             this.SendBtn.UseVisualStyleBackColor = true;
             this.SendBtn.Click += new System.EventHandler(this.SendBtn_Click);
             // 
-            // DisconnectBtn
+            // DeviceListBx
             // 
-            this.DisconnectBtn.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.DisconnectBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.DisconnectBtn.Font = new System.Drawing.Font("Papyrus", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DisconnectBtn.Location = new System.Drawing.Point(346, 32);
-            this.DisconnectBtn.Name = "DisconnectBtn";
-            this.DisconnectBtn.Size = new System.Drawing.Size(112, 44);
-            this.DisconnectBtn.TabIndex = 0;
-            this.DisconnectBtn.Text = "Disconnect";
-            this.DisconnectBtn.UseVisualStyleBackColor = true;
-            this.DisconnectBtn.Click += new System.EventHandler(this.DisconnectBtn_Click);
+            this.DeviceListBx.FormattingEnabled = true;
+            this.DeviceListBx.Location = new System.Drawing.Point(638, 161);
+            this.DeviceListBx.Name = "DeviceListBx";
+            this.DeviceListBx.Size = new System.Drawing.Size(142, 303);
+            this.DeviceListBx.TabIndex = 5;
             // 
-            // Form1
+            // ClientPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::TheClient.Properties.Resources.Christmas_HD_Wallpapers_1920x1200__24_;
-            this.ClientSize = new System.Drawing.Size(613, 483);
+            this.ClientSize = new System.Drawing.Size(803, 483);
+            this.Controls.Add(this.DeviceListBx);
             this.Controls.Add(this.SendBtn);
             this.Controls.Add(this.LogLstBx);
             this.Controls.Add(this.MsgTxtBx);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.DisconnectBtn);
             this.Controls.Add(this.ConnectBtn);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "ClientPage";
             this.Text = "The Client";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -132,7 +127,7 @@
         private System.Windows.Forms.ListBox LogLstBx;
         private System.Windows.Forms.TextBox MsgTxtBx;
         private System.Windows.Forms.Button SendBtn;
-        private System.Windows.Forms.Button DisconnectBtn;
+        private System.Windows.Forms.ListBox DeviceListBx;
     }
 }
 

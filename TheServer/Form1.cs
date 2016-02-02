@@ -245,9 +245,8 @@ namespace TheServer
         /// The DataBase Controllers
         /// </summary>
         #region The DataBase
-
-
-        public void createDatabase()
+       
+        public void ConnectToSql()
         {
             try
             {
@@ -255,26 +254,21 @@ namespace TheServer
                 {
                     // create a new database connection:
                     sqlite_conn = new SQLiteConnection("Data Source=database.db;Version=3;New=True;Compress=True;");
-                    CreateTableBtn.Enabled = true;
-                    CreateDbBtn.Enabled = false;
+                    //CreateTableBtn.Enabled = true;
                 }
                 else
                 {
                     sqlite_conn = new SQLiteConnection("Data Source=database.db;Version=3;New=False;Compress=True;");
-                    CreateTableBtn.Enabled = false;
-                    CreateDbBtn.Enabled = false;
+                    //CreateTableBtn.Enabled = false;
                 }
 
                 logCall(false, "Created DB ");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logCall(false, ex.Message);
             }
-        }
 
-        public void ConnectToSql()
-        {
 
             try
             {
@@ -296,42 +290,108 @@ namespace TheServer
 
         }
 
-        public void CreateTable(string name)
+        public void CreateTable()
         {
+            //Product Table
+            try
+            {
+                sqlite_cmd.CommandText = "CREATE TABLE Categories (catid int primary key, catname varchar(30), num int);";
+                sqlite_cmd.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                logCall(false, "SQL Exception: In Categories");
+                logCall(false, ex.Message);
+            }
+            catch(Exception ex)
+            {
+                logCall(false, ex.Message);
+            }
 
-            // Let the SQLiteCommand object know our SQL-Query:
-            sqlite_cmd.CommandText = "CREATE TABLE test (id integer primary key, text varchar(100));";
 
-            // Now lets execute the SQL ;D
-            sqlite_cmd.ExecuteNonQuery();
-        }        
+            //Main Table
+            try
+            {
+                sqlite_cmd.CommandText = "CREATE TABLE Products (pid int primary key, pname varchar(30), catid int  , mid int, brand varchar(50),  qty float , wt float , stock float, price float ,foreign key(catid) references Categories(catid));";
+                sqlite_cmd.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                logCall(false, "SQL Exception: In Products");
+                logCall(false, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                logCall(false, ex.Message);
+            }
+            try
+            {
+                sqlite_cmd.CommandText = "CREATE TABLE Users(uid int primary key, uname varchar(50), desig varchar(50));";
+                sqlite_cmd.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                logCall(false, "SQL Exception: in Users");
+                logCall(false, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                logCall(false, ex.Message);
+            }
+        }
 
-        public void Insertion()
+        public void Insertion(string tname,bool preSet)
         {
-            // Lets insert something into our new table:
-            sqlite_cmd.CommandText = "INSERT INTO test (id, text) VALUES (1, 'Test Text 1');";
+            if(preSet == true)
+            {
+                try
+                {
+                    sqlite_cmd.CommandText = "INSERT INTO " + tname + " VALUES (1,'TIGER',100,0101,'Britannia',100,50,1000,10);";
+                    sqlite_cmd.ExecuteNonQuery();
 
-            // And execute this again ;D
-            sqlite_cmd.ExecuteNonQuery();
+                    logCall(false, "Inserted");
+                }
+                catch(Exception ex)
+                {
+                    logCall(false, "Sql Exception in preSet insertion:");
+                    logCall(false, ex.Message);
+                }
+            }
+            else
+            {
+                try
+                {
+                    sqlite_cmd.CommandText = "INSERT INTO " + tname + " VALUES (" + pidTxtBx.Text + ",'" + pnameTxtBt.Text + "'," + catidTxtBx.Text + "," + manidTxtBx.Text + ",'" + brandTxtBx.Text + "'," + qtyTxtBx.Text + "," + wtTxtBx.Text + "," + stkTxtBx.Text + "," + priceTxtBx.Text + ");";
+                    System.Console.WriteLine(sqlite_cmd.CommandText);
+                    sqlite_cmd.ExecuteNonQuery();
 
-            // ...and inserting another line:
-            sqlite_cmd.CommandText = "INSERT INTO test (id, text) VALUES (2, 'Test Text 2');";
+                    logCall(false, "Inserted");
+                }
+                catch (Exception ex)
+                {
+                    logCall(false, "Sql Exception in preSet insertion:");
+                    logCall(false, ex.Message);
+                }
+            }
 
-            // And execute this again ;D
-            sqlite_cmd.ExecuteNonQuery();
+            ConnectToSql();
+            displaySql();
+            CloseSqlConnection();
+
+
         }
 
         public void displaySql()
         {
 
-            //sqlite_cmd = new SQLiteCommand();
+            logCall(false, "Display");
 
             using (sqlite_cmd)
             {
                 
                 //sqlite_cmd = new SQLiteCommand();
                 // First lets build a SQL-Query again:
-                sqlite_cmd.CommandText = "SELECT * FROM test";
+                sqlite_cmd.CommandText = "SELECT * FROM Products;";
 
                 sqlite_cmd.CommandTimeout = 30;
 
@@ -340,12 +400,109 @@ namespace TheServer
                 // Now the SQLiteCommand object can give us a DataReader-Object:
                 sqlite_datareader = sqlite_cmd.ExecuteReader();
 
+                //(pid int primary key, pname varchar(30), catid int, mid int, brand varchar(50), qty float, wt float, stock float, price float, foreign key(catid) references Categories(catid)); ";
+
+                tableGridVw.Rows.Clear();
+
                 // The SQLiteDataReader allows us to run through the result lines:
                 while (sqlite_datareader.Read()) // Read() returns true if there is still a result line to read
                 {
                     // Print out the content of the text field:
-                    System.Console.WriteLine(sqlite_datareader["text"]);
-                    MessageBox.Show(sqlite_datareader["text"].ToString());
+                    System.Console.WriteLine(sqlite_datareader["pid"]);
+                    System.Console.WriteLine(sqlite_datareader["pname"]);
+                    System.Console.WriteLine(sqlite_datareader["catid"]);
+                    System.Console.WriteLine(sqlite_datareader["mid"]);
+                    System.Console.WriteLine(sqlite_datareader["brand"]);
+                    System.Console.WriteLine(sqlite_datareader["qty"]);
+                    System.Console.WriteLine(sqlite_datareader["wt"]);
+                    System.Console.WriteLine(sqlite_datareader["stock"]);
+                    System.Console.WriteLine(sqlite_datareader["price"]);
+
+                    tableGridVw.Rows.Add(new object[] {
+
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pid")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pname")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("catid")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("mid")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("brand")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("qty")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("wt")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("stock")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("price"))
+
+                    });
+
+
+                }
+
+
+
+
+                // We are ready, now lets cleanup and close our connection:
+                sqlite_conn.Close();
+                //sqlite_conn.Open();
+
+                logCall(false, "Complete");
+                
+
+            }
+            
+
+        }
+
+
+
+        private void SearchSql(string s)
+        {
+            using (sqlite_cmd)
+            {
+
+                tableGridVw.Rows.Clear();
+
+                logCall(false, "Searching...");
+                
+                // First lets build a SQL-Query again:
+                sqlite_cmd.CommandText = "SELECT * FROM Products WHERE pname LIKE '%"+ s +"%';";
+
+                sqlite_cmd.CommandTimeout = 30;
+
+                sqlite_cmd.CommandType = CommandType.Text;
+
+                // Now the SQLiteCommand object can give us a DataReader-Object:
+                sqlite_datareader = sqlite_cmd.ExecuteReader();
+
+                //(pid int primary key, pname varchar(30), catid int, mid int, brand varchar(50), qty float, wt float, stock float, price float, foreign key(catid) references Categories(catid)); ";
+
+
+                // The SQLiteDataReader allows us to run through the result lines:
+                while (sqlite_datareader.Read()) // Read() returns true if there is still a result line to read
+                {
+                    // Print out the content of the text field:
+                    System.Console.WriteLine(sqlite_datareader["pid"]);
+                    System.Console.WriteLine(sqlite_datareader["pname"]);
+                    System.Console.WriteLine(sqlite_datareader["catid"]);
+                    System.Console.WriteLine(sqlite_datareader["mid"]);
+                    System.Console.WriteLine(sqlite_datareader["brand"]);
+                    System.Console.WriteLine(sqlite_datareader["qty"]);
+                    System.Console.WriteLine(sqlite_datareader["wt"]);
+                    System.Console.WriteLine(sqlite_datareader["stock"]);
+                    System.Console.WriteLine(sqlite_datareader["price"]);
+
+                    tableGridVw.Rows.Add(new object[] {
+
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pid")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pname")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("catid")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("mid")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("brand")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("qty")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("wt")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("stock")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("price"))
+
+                    });
+
+
                 }
 
 
@@ -357,13 +514,11 @@ namespace TheServer
 
                 logCall(false, "Complete");
 
+
             }
 
-            
-
-            
-
         }
+
 
         public void CloseSqlConnection()
         {
@@ -470,22 +625,26 @@ namespace TheServer
         private void ConnectSqlBtn_Click(object sender, EventArgs e)
         {
             ConnectToSql();
+            CreateTable();
+            CloseSqlConnection();
         }
         private void CreateTableBtn_Click(object sender, EventArgs e)
         {
-            CreateTable("");
+            //CreateTable();
         }
 
         private void InsertionBtn_Click(object sender, EventArgs e)
         {
-            Insertion();
+           ConnectToSql();
+            Insertion("Products", false);
+            CloseSqlConnection();
         }
 
         private void DisplayBtn_Click(object sender, EventArgs e)
-        {
-            createDatabase();
+        {            
             ConnectToSql();
             displaySql();
+            CloseSqlConnection();
         }
 
         private void CloseSqlBtn_Click(object sender, EventArgs e)
@@ -493,10 +652,34 @@ namespace TheServer
             CloseSqlConnection();
         }
 
-        private void CreateDbBtn_Click(object sender, EventArgs e)
+        
+
+        private void searchPic_Click(object sender, EventArgs e)
         {
-            createDatabase();
+            ConnectToSql();
+            string s = searchTxtBx.Text;
+            SearchSql(s);
+            CloseSqlConnection();
         }
+
+        private void searchTxtBx_Click(object sender, EventArgs e)
+        {
+            searchTxtBx.Text = "";
+        }
+
+        private void resetBtn_Click(object sender, EventArgs e)
+        {
+            pidTxtBx.Text = "";
+            pnameTxtBt.Text = "";
+            catidTxtBx.Text = "";
+            manidTxtBx.Text = "";
+            brandTxtBx.Text = "";
+            qtyTxtBx.Text = "";
+            wtTxtBx.Text = "";
+            stkTxtBx.Text = "";
+            priceTxtBx.Text = "";
+        }
+
 
         #endregion
 
