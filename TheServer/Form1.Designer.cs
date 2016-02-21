@@ -89,6 +89,8 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.resetBtn = new System.Windows.Forms.Button();
+            this.editPic = new System.Windows.Forms.PictureBox();
+            this.delPic = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.tableGridVw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -105,6 +107,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox15)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editPic)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.delPic)).BeginInit();
             this.SuspendLayout();
             // 
             // txtLog
@@ -542,6 +546,7 @@
             this.label5.Size = new System.Drawing.Size(97, 29);
             this.label5.TabIndex = 44;
             this.label5.Text = "View all";
+            this.label5.Click += new System.EventHandler(this.DisplayBtn_Click);
             // 
             // pictureBox13
             // 
@@ -670,6 +675,28 @@
             this.resetBtn.UseVisualStyleBackColor = false;
             this.resetBtn.Click += new System.EventHandler(this.resetBtn_Click);
             // 
+            // editPic
+            // 
+            this.editPic.Image = global::TheServer.Properties.Resources.ed;
+            this.editPic.Location = new System.Drawing.Point(764, 360);
+            this.editPic.Name = "editPic";
+            this.editPic.Size = new System.Drawing.Size(41, 41);
+            this.editPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.editPic.TabIndex = 45;
+            this.editPic.TabStop = false;
+            this.editPic.Click += new System.EventHandler(this.editPic_Click);
+            // 
+            // delPic
+            // 
+            this.delPic.Image = global::TheServer.Properties.Resources.del;
+            this.delPic.Location = new System.Drawing.Point(826, 360);
+            this.delPic.Name = "delPic";
+            this.delPic.Size = new System.Drawing.Size(41, 41);
+            this.delPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.delPic.TabIndex = 45;
+            this.delPic.TabStop = false;
+            this.delPic.Click += new System.EventHandler(this.delPic_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -687,6 +714,8 @@
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
+            this.Controls.Add(this.delPic);
+            this.Controls.Add(this.editPic);
             this.Controls.Add(this.pictureBox15);
             this.Controls.Add(this.pictureBox14);
             this.Controls.Add(this.pictureBox13);
@@ -754,6 +783,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox15)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editPic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.delPic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -823,6 +854,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox priceTxtBx;
         private System.Windows.Forms.Button resetBtn;
+        private System.Windows.Forms.PictureBox editPic;
+        private System.Windows.Forms.PictureBox delPic;
     }
 }
 

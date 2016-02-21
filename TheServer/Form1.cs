@@ -12,24 +12,33 @@ using System.Windows.Forms;
 using RedCorona.Net;
 using System.Net;
 using Finisar.SQLite;
+using System.Diagnostics;
 
 namespace TheServer
 {
     public partial class Form1 : Form
-    {        
+    {
+
+        #region The Variables
 
         private byte[] _buffer = new byte[1024];
-
-        private Socket _serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-        private List<Socket> _clientSockets = new List<Socket>();
-
         public delegate void invokeDelegate();
 
-        //db section
+        #region connection variables
+        private Socket _serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private List<Socket> _clientSockets = new List<Socket>();
+
+        #endregion        
+
+        #region DB Variables
         SQLiteConnection sqlite_conn;
         SQLiteCommand sqlite_cmd;
         SQLiteDataReader sqlite_datareader;
+
+        #endregion
+
+
+        #endregion
 
         public Form1()
         {
@@ -128,8 +137,8 @@ namespace TheServer
 
 
         #endregion
+            
 
-        
 
         */
 
@@ -164,6 +173,7 @@ namespace TheServer
 
         }
 
+        //When a client tries to connect
         private void AcceptCallback(IAsyncResult ar)
         {
             try
@@ -197,30 +207,111 @@ namespace TheServer
                 logCall(false, text);
 
 
+                string nilValue = "Nill";
 
-                byte[] data;
+                string retData = nilValue;
+                byte[] data = Encoding.ASCII.GetBytes(retData);
 
-                if (text.ToLower() == "get time")
+                string id = string.Empty;
+
+                try
                 {
-                    logCall(true, DateTime.Now.ToLongTimeString());
-                    data = Encoding.ASCII.GetBytes(DateTime.Now.ToLongTimeString());                   
-                }
-                else if (text.ToLower() == "initialize")
-                {
-                    logCall(true, "Done");
-                    data = Encoding.ASCII.GetBytes("Done");
-                }
-                else
-                {
-                    logCall(true, "Ack");
-                    data = Encoding.ASCII.GetBytes("Ack");
-                    
-                }
+
+                    if (text == "Initialize")
+                    {
+                        Debug.WriteLine("Got the first call Initialize");
+                        retData = "Acknowledged";
+                    }
+                    else
+                    {
+                                                
+                        //getting first three letters for identification
+                        try
+                        {
+
+                            try  //for id creation
+                            {
+
+                                char[] te = text.ToCharArray();                              
+
+                                int loc_ = text.IndexOf('_');
+                                
+                                id = new string(te, 0, loc_);
+
+                                Debug.WriteLine("Id : " + id);
+                                logCall(false, "Id:"+id);
+
+                            }
+                            catch (Exception ex)
+                            {
+                                logCall(false, "Exception in id creation");
+                                logCall(false, ex.Message);
+                            }
+
+                            //Debug.WriteLine(id.Length.ToString());
+
+                            int len = id.Length;
+
+                            if (len > 4)
+                            {
+                                Debug.WriteLine("String Len:" + len.ToString());
+
+                                if(id == "div")
+                                {
+                                    logCall(false, "What the hell man");
+                                }
+
+                                string whichOne = text.Substring(0, 3);
+
+                                if (whichOne == "div")
+                                {
+                                    retData = string.Empty;
+                                    Debug.WriteLine("Got into device condition");
+                                    retData = DiviceHandle(text);
+
+                                }
+                                else if (whichOne == "cou")
+                                {
+                                    retData = string.Empty;
+                                    Debug.WriteLine("Got into client condition");
+                                    retData = CounterHandle(text);
+                                }
+
+                                else
+                                {
+                                    logCall(false, "Exception in the received text: Invalid Format");
+                                    logCall(false, "Text: " + text);
+                                }
+                            }
+                            else
+                            {
+                                logCall(false, "Exception : Id Recognition");
+                                logCall(false, "The id is not recognized.. Discarding the request");
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                            logCall(false, ex.Message);
+                        }
+                    }
 
 
-                //Sending the data back
-                socket.BeginSend(data, 0, data.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
-                socket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
+                    logCall(true, retData);
+                    Debug.WriteLine(retData);
+
+                    data = Encoding.ASCII.GetBytes(retData);
+
+                    //Sending the data back
+                    socket.BeginSend(data, 0, data.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
+                    socket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
+                }
+
+                catch (Exception ex)
+                {
+                    socket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
+                    logCall(false, ex.Message);
+                }
+
             }
             catch (Exception ex)
             {
@@ -237,6 +328,24 @@ namespace TheServer
             Socket socket = (Socket)ar.AsyncState;
             socket.EndSend(ar);
         }
+
+        private string CounterHandle(string text)
+        {
+            Debug.WriteLine(text);
+
+            return "Got the counter handle";
+        }
+
+        private string DiviceHandle(string text)
+        {
+
+            Debug.WriteLine(text);
+
+            //return the ack
+            return "_1_Tiger Biscuts_2_101_Brittania_100_500_70_10_";
+        }
+
+       
 
         #endregion
 
@@ -297,6 +406,7 @@ namespace TheServer
             {
                 sqlite_cmd.CommandText = "CREATE TABLE Categories (catid int primary key, catname varchar(30), num int);";
                 sqlite_cmd.ExecuteNonQuery();
+                logCall(false, "Category Table Created");
             }
             catch (SQLiteException ex)
             {
@@ -314,6 +424,7 @@ namespace TheServer
             {
                 sqlite_cmd.CommandText = "CREATE TABLE Products (pid int primary key, pname varchar(30), catid int  , mid int, brand varchar(50),  qty float , wt float , stock float, price float ,foreign key(catid) references Categories(catid));";
                 sqlite_cmd.ExecuteNonQuery();
+                logCall(false, "Products Table Created");
             }
             catch (SQLiteException ex)
             {
@@ -324,10 +435,13 @@ namespace TheServer
             {
                 logCall(false, ex.Message);
             }
+
+            //User Table
             try
             {
                 sqlite_cmd.CommandText = "CREATE TABLE Users(uid int primary key, uname varchar(50), desig varchar(50));";
                 sqlite_cmd.ExecuteNonQuery();
+                logCall(false, "Users Table Created");
             }
             catch (SQLiteException ex)
             {
@@ -338,6 +452,26 @@ namespace TheServer
             {
                 logCall(false, ex.Message);
             }
+
+
+            try
+            {
+                sqlite_cmd.CommandText = "CREATE TABLE Device (did varchar(50) primary key);";
+                sqlite_cmd.ExecuteNonQuery();
+                logCall(false, "Users Table Created");
+            }
+            catch (SQLiteException ex)
+            {
+                logCall(false, "SQL Exception: in Users");
+                logCall(false, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                logCall(false, ex.Message);
+            }
+
+
+
         }
 
         public void Insertion(string tname,bool preSet)
@@ -450,8 +584,6 @@ namespace TheServer
 
         }
 
-
-
         private void SearchSql(string s)
         {
             using (sqlite_cmd)
@@ -471,7 +603,7 @@ namespace TheServer
                 // Now the SQLiteCommand object can give us a DataReader-Object:
                 sqlite_datareader = sqlite_cmd.ExecuteReader();
 
-                //(pid int primary key, pname varchar(30), catid int, mid int, brand varchar(50), qty float, wt float, stock float, price float, foreign key(catid) references Categories(catid)); ";
+                
 
 
                 // The SQLiteDataReader allows us to run through the result lines:
@@ -519,10 +651,8 @@ namespace TheServer
 
         }
 
-
         public void CloseSqlConnection()
         {
-           // We are ready, now lets cleanup and close our connection:
            sqlite_conn.Close();
         }
 
@@ -680,6 +810,15 @@ namespace TheServer
             priceTxtBx.Text = "";
         }
 
+        private void editPic_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void delPic_Click(object sender, EventArgs e)
+        {
+
+        }
 
         #endregion
 

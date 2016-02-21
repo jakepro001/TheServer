@@ -95,6 +95,8 @@
   <ItemGroup>
     <Content Include="ExternelLibraries\tcpServer.dll" />
     <Content Include="ExternelLibraries\tcpServer.pdb" />
+    <None Include="Resources\ed.jpg" />
+    <None Include="Resources\del.jpg" />
     <None Include="Resources\whitebox2.jpg" />
     <None Include="Resources\whitebox1.jpg" />
     <None Include="Resources\whitebox.jpg" />
