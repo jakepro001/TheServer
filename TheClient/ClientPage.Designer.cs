@@ -81,6 +81,8 @@
             this.MsgTxtBx.TabIndex = 3;
             this.MsgTxtBx.Text = "Message...";
             this.MsgTxtBx.Click += new System.EventHandler(this.MsgTxtBx_Click);
+            this.MsgTxtBx.TextChanged += new System.EventHandler(this.MsgTxtBx_TextChanged);
+            this.MsgTxtBx.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MsgTxtBx_KeyDown);
             // 
             // SendBtn
             // 

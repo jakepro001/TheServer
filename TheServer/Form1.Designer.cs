@@ -91,6 +91,7 @@
             this.resetBtn = new System.Windows.Forms.Button();
             this.editPic = new System.Windows.Forms.PictureBox();
             this.delPic = new System.Windows.Forms.PictureBox();
+            this.InsertPresetBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.tableGridVw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -176,7 +177,7 @@
             // 
             // DisplayBtn
             // 
-            this.DisplayBtn.Location = new System.Drawing.Point(1074, 423);
+            this.DisplayBtn.Location = new System.Drawing.Point(1059, 423);
             this.DisplayBtn.Name = "DisplayBtn";
             this.DisplayBtn.Size = new System.Drawing.Size(75, 23);
             this.DisplayBtn.TabIndex = 35;
@@ -305,7 +306,7 @@
             // 
             // CloseSqlBtn
             // 
-            this.CloseSqlBtn.Location = new System.Drawing.Point(993, 423);
+            this.CloseSqlBtn.Location = new System.Drawing.Point(984, 423);
             this.CloseSqlBtn.Name = "CloseSqlBtn";
             this.CloseSqlBtn.Size = new System.Drawing.Size(75, 23);
             this.CloseSqlBtn.TabIndex = 36;
@@ -315,7 +316,7 @@
             // 
             // ConnectSqlBtn
             // 
-            this.ConnectSqlBtn.Location = new System.Drawing.Point(912, 423);
+            this.ConnectSqlBtn.Location = new System.Drawing.Point(911, 423);
             this.ConnectSqlBtn.Name = "ConnectSqlBtn";
             this.ConnectSqlBtn.Size = new System.Drawing.Size(75, 23);
             this.ConnectSqlBtn.TabIndex = 36;
@@ -463,6 +464,7 @@
             this.passwordTxtBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.passwordTxtBx.Location = new System.Drawing.Point(76, 211);
             this.passwordTxtBx.Name = "passwordTxtBx";
+            this.passwordTxtBx.PasswordChar = '*';
             this.passwordTxtBx.Size = new System.Drawing.Size(190, 30);
             this.passwordTxtBx.TabIndex = 40;
             // 
@@ -507,6 +509,7 @@
             this.loginBtn.TabIndex = 35;
             this.loginBtn.Text = "Login";
             this.loginBtn.UseVisualStyleBackColor = false;
+            this.loginBtn.Click += new System.EventHandler(this.loginBtn_Click);
             // 
             // label2
             // 
@@ -551,9 +554,9 @@
             // pictureBox13
             // 
             this.pictureBox13.Image = global::TheServer.Properties.Resources.keyhole;
-            this.pictureBox13.Location = new System.Drawing.Point(229, 76);
+            this.pictureBox13.Location = new System.Drawing.Point(230, 79);
             this.pictureBox13.Name = "pictureBox13";
-            this.pictureBox13.Size = new System.Drawing.Size(41, 41);
+            this.pictureBox13.Size = new System.Drawing.Size(36, 35);
             this.pictureBox13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox13.TabIndex = 45;
             this.pictureBox13.TabStop = false;
@@ -678,9 +681,9 @@
             // editPic
             // 
             this.editPic.Image = global::TheServer.Properties.Resources.ed;
-            this.editPic.Location = new System.Drawing.Point(764, 360);
+            this.editPic.Location = new System.Drawing.Point(764, 362);
             this.editPic.Name = "editPic";
-            this.editPic.Size = new System.Drawing.Size(41, 41);
+            this.editPic.Size = new System.Drawing.Size(35, 35);
             this.editPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.editPic.TabIndex = 45;
             this.editPic.TabStop = false;
@@ -689,13 +692,23 @@
             // delPic
             // 
             this.delPic.Image = global::TheServer.Properties.Resources.del;
-            this.delPic.Location = new System.Drawing.Point(826, 360);
+            this.delPic.Location = new System.Drawing.Point(815, 363);
             this.delPic.Name = "delPic";
-            this.delPic.Size = new System.Drawing.Size(41, 41);
+            this.delPic.Size = new System.Drawing.Size(34, 35);
             this.delPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.delPic.TabIndex = 45;
             this.delPic.TabStop = false;
             this.delPic.Click += new System.EventHandler(this.delPic_Click);
+            // 
+            // InsertPresetBtn
+            // 
+            this.InsertPresetBtn.Location = new System.Drawing.Point(1135, 423);
+            this.InsertPresetBtn.Name = "InsertPresetBtn";
+            this.InsertPresetBtn.Size = new System.Drawing.Size(75, 23);
+            this.InsertPresetBtn.TabIndex = 35;
+            this.InsertPresetBtn.Text = "Preset Insert";
+            this.InsertPresetBtn.UseVisualStyleBackColor = true;
+            this.InsertPresetBtn.Click += new System.EventHandler(this.InsertPresetBtn_Click);
             // 
             // Form1
             // 
@@ -743,6 +756,7 @@
             this.Controls.Add(this.searchTxtBx);
             this.Controls.Add(this.CloseSqlBtn);
             this.Controls.Add(this.ConnectSqlBtn);
+            this.Controls.Add(this.InsertPresetBtn);
             this.Controls.Add(this.DisplayBtn);
             this.Controls.Add(this.loginBtn);
             this.Controls.Add(this.resetBtn);
@@ -856,6 +870,7 @@
         private System.Windows.Forms.Button resetBtn;
         private System.Windows.Forms.PictureBox editPic;
         private System.Windows.Forms.PictureBox delPic;
+        private System.Windows.Forms.Button InsertPresetBtn;
     }
 }
 
