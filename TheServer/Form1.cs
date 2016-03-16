@@ -46,18 +46,67 @@ namespace TheServer
 
         #endregion
 
+
         public Form1()
         {
             InitializeComponent();
 
             //locking the ui
-            //disablingEverything();
+            disablingEverything();
 
         }
 
 
+        /// <summary>
+        /// The Login
+        /// </summary>
         #region Login 
 
+        //Login Section
+        private void login()
+        {
+            try
+            {
+                sqlite_cmd.CommandText = "SELECT * FROM users";
+                sqlite_cmd.CommandTimeout = 30;
+                sqlite_cmd.CommandType = CommandType.Text;
+
+                sqlite_datareader = sqlite_cmd.ExecuteReader();
+
+                while (sqlite_datareader.Read())
+                {
+
+                    if (usernameTxtBx.Text == sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("uname")).ToString())
+                    {
+                        if (passwordTxtBx.Text == sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pass")).ToString())
+                        {
+                            logCall(false, "Logged in");
+                            enableEverything();
+                            disableLogin();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logCall(false, "Exception in Login");
+                logCall(false, ex.Message);
+            }
+        }
+        private void disableLogin()
+        {
+            usernameTxtBx.Text = "";
+            passwordTxtBx.Text = "";
+
+
+            usernameTxtBx.Enabled = false;
+            passwordTxtBx.Enabled = false;
+
+            loginBtn.Text = "LogOut";
+
+        }
+
+        //UI Section
         private void disablingEverything()
         {
 
@@ -91,7 +140,7 @@ namespace TheServer
             editPic.Enabled = false;
 
             pictureBox15.Enabled = false;
-            label5.Enabled = false;          
+            label5.Enabled = false;
 
         }
 
@@ -132,148 +181,29 @@ namespace TheServer
 
         }
 
-        private void disableLogin()
+
+        //Logout Section
+        private void logout()
+        {
+            enableLogin();
+            disablingEverything();
+            logCall(false, "Logged Out");
+        }
+
+        private void enableLogin()
         {
             usernameTxtBx.Text = "";
             passwordTxtBx.Text = "";
 
 
-            usernameTxtBx.Enabled = false;
-            passwordTxtBx.Enabled = false;
+            usernameTxtBx.Enabled = true;
+            passwordTxtBx.Enabled = true;
 
-            loginBtn.Enabled = false;
-
-        }
-
-
-        private void login()
-        {            
-            try
-            {
-                sqlite_cmd.CommandText = "SELECT * FROM users";
-                sqlite_cmd.CommandTimeout = 30;
-                sqlite_cmd.CommandType = CommandType.Text;
-                
-                sqlite_datareader = sqlite_cmd.ExecuteReader();
-
-                while (sqlite_datareader.Read())
-                {
-
-                    if (usernameTxtBx.Text == sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("uname")).ToString())
-                    {
-                        if (passwordTxtBx.Text == sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pass")).ToString())
-                        {
-                            logCall(false, "Logged in");
-                            enableEverything();
-                            disableLogin();
-                        }
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                logCall(false, "Exception in Login");
-                logCall(false, ex.Message);
-            }
+            loginBtn.Text = "Login";            
         }
 
         #endregion
-
-        /*
-
-        /*
-        //[code:Red corona]
-
-        /// <summary>
-        /// Client Handling
-        /// </summary>
-        #region Client/Information Handle
-            
-        private void send()
-        {
-            string text = "Acknowledged";
-            server.Broadcast(Encoding.UTF8.GetBytes(text));
-        }
-
-
-
-        #endregion
-
-
-        /// <summary>
-        /// Server Side
-        /// </summary>
-        #region The Server
-
         
-        
-        void StartServer()
-        {
-            try
-            {
-                server = new Server(3001, new ClientEvent(ClientConnect));
-                lblStatus.Text = "Server is Up";
-                lblStatus.BackColor = Color.Lime;
-                invokeDelegate del = () =>
-                {
-                    logData(false, "Server up");
-                };
-                Invoke(del);
-            }
-            catch (Exception ex)
-            {
-                lblStatus.Text = "Server Down";
-                lblStatus.BackColor = Color.Red;
-                invokeDelegate del = () =>
-                 {
-                     logData(false, "Exception :: " + ex.Message);
-                 };
-                Invoke(del);
-            }
-                       
-
-        }
-
-        bool ClientConnect(Server serv, ClientInfo new_client)
-        {
-            invokeDelegate del = () =>
-            {
-                logData(false, "Connected");
-            };
-            Invoke(del);
-
-            new_client.Delimiter = "\n";
-            new_client.OnRead += new ConnectionRead(ReadData);
-            return true;
-        }
-
-        private void ReadData(ClientInfo ci, string text)
-        {
-            invokeDelegate del = () =>
-            {
-                logData(false, "  "+ci.ID + ":" + text);
-            };
-            Invoke(del);
-
-            if (text[0]=='!')
-            {
-                server.Broadcast(Encoding.UTF8.GetBytes(text));
-            }
-            else
-            {
-                ci.Send(text);
-            }
-        }
-
-        
-
-
-
-        #endregion
-            
-
-
-        */
 
         /// <summary>
         /// The Server Side
@@ -876,7 +806,7 @@ namespace TheServer
                 }
                 catch (Exception ex)
                 {
-                    logCall(false, "Sql Exception in preSet insertion:");
+                    logCall(false, "Sql Exception in insertion:");
                     logCall(false, ex.Message);
                 }
             }
@@ -914,6 +844,7 @@ namespace TheServer
                 // The SQLiteDataReader allows us to run through the result lines:
                 while (sqlite_datareader.Read()) // Read() returns true if there is still a result line to read
                 {
+                    /*
                     // Print out the content of the text field:
                     System.Console.WriteLine(sqlite_datareader["pid"]);
                     System.Console.WriteLine(sqlite_datareader["pname"]);
@@ -924,6 +855,7 @@ namespace TheServer
                     System.Console.WriteLine(sqlite_datareader["wt"]);
                     System.Console.WriteLine(sqlite_datareader["stock"]);
                     System.Console.WriteLine(sqlite_datareader["price"]);
+                    */
 
                     tableGridVw.Rows.Add(new object[] {
 
@@ -1102,7 +1034,6 @@ namespace TheServer
 
             return RetString;
         }
-
         private string deviceDatabaseReturning(string req)
         {
             logCall(false, "In the database return func");
@@ -1158,12 +1089,111 @@ namespace TheServer
         }
 
 
+        private void deleteFromDatabase()
+        {
+            Int32 selectedCellCount = tableGridVw.GetCellCount(DataGridViewElementStates.Selected);
+            if (selectedCellCount > 0)
+            {
+                for (int i = 0; i < tableGridVw.SelectedRows.Count; i++)
+                {
+                    int rowIndex = tableGridVw.SelectedCells[i].RowIndex;
+                    DataGridViewRow row = tableGridVw.Rows[rowIndex];
+
+                    try
+                    {
+                        sqlite_cmd.CommandText = "DELETE FROM Products WHERE pid = " + row.Cells[0].Value.ToString() + ";";
+                        sqlite_cmd.ExecuteNonQuery();
+
+                        logCall(false, "Deleted Selected row");
+                    }
+                    catch(SQLiteException ex)
+                    {
+                        logCall(false, "Sql Exception in Deletion");
+                        logCall(false, ex.Message);
+                    }
+                    catch(Exception ex)
+                    {
+                        logCall(false, "Exception in Deletion");
+                        logCall(false, ex.Message);
+                    }
+
+                }
+            }            
+        }
+        private void editFromDatabase()
+        {
+            Int32 selectedCellCount = tableGridVw.GetCellCount(DataGridViewElementStates.Selected);
+            if (selectedCellCount > 0)
+            {
+                if (tableGridVw.AreAllCellsSelected(true))
+                {
+                    MessageBox.Show("All cells are selected", "Selected Cells");
+                }
+                else
+                {
+
+                    if(tableGridVw.SelectedRows.Count == 1)
+                    {
+
+                        InsertBtn.Text = "Edit";
+
+                        //Retrieve the data from the table and set it to the edit textboxes
+
+                        int rowIndex = tableGridVw.SelectedCells[0].RowIndex;
+
+                        DataGridViewRow row = tableGridVw.Rows[rowIndex];
+
+                        //MessageBox.Show(row.Cells[1].Value.ToString());
+                          pidTxtBx.Text = row.Cells[0].Value.ToString();
+                        pnameTxtBt.Text = row.Cells[1].Value.ToString();
+                        catidTxtBx.Text = row.Cells[2].Value.ToString();
+                        manidTxtBx.Text = row.Cells[3].Value.ToString();
+                        brandTxtBx.Text = row.Cells[4].Value.ToString();
+                          qtyTxtBx.Text = row.Cells[5].Value.ToString();
+                           wtTxtBx.Text = row.Cells[6].Value.ToString();
+                          stkTxtBx.Text = row.Cells[7].Value.ToString();
+                        priceTxtBx.Text = row.Cells[8].Value.ToString();
+
+
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Multiple Columns Selected");
+                    }
+                }
+            }
+        }
+
+        private void Editing()
+        {
+            try
+            {                
+                sqlite_cmd.CommandText = "UPDATE Products SET pid = " + pidTxtBx.Text + ", pname = '" + pnameTxtBt.Text + "', catid = " + catidTxtBx.Text + ", mid = " + manidTxtBx.Text + ",brand = '"+brandTxtBx.Text+"', qty = " + qtyTxtBx.Text + ",wt=" + wtTxtBx.Text + ",stock = " + stkTxtBx.Text + ", price = " + priceTxtBx.Text + " WHERE pid = " + pidTxtBx.Text + ";";
+                sqlite_cmd.ExecuteNonQuery();                
+
+                logCall(false, "Database Upddated");
+
+                resettingTextBx();
+                InsertBtn.Text = "Insert";
+
+            }
+            catch (Exception ex)
+            {
+                logCall(false, "Sql Exception in Editting : ");
+                logCall(false, ex.Message);
+            }
+
+        }
+
+
         public void CloseSqlConnection()
         {
            sqlite_conn.Close();
         }
 
         #endregion
+
 
         /// <summary>
         /// The Contols For UI
@@ -1217,7 +1247,18 @@ namespace TheServer
             lblConnected.Text = n.ToString();
         }
 
-
+        private void resettingTextBx()
+        {
+            pidTxtBx.Text = "";
+            pnameTxtBt.Text = "";
+            catidTxtBx.Text = "";
+            manidTxtBx.Text = "";
+            brandTxtBx.Text = "";
+            qtyTxtBx.Text = "";
+            wtTxtBx.Text = "";
+            stkTxtBx.Text = "";
+            priceTxtBx.Text = "";
+        }
 
 
         #endregion
@@ -1272,9 +1313,19 @@ namespace TheServer
         private void InsertionBtn_Click(object sender, EventArgs e)
         {
            ConnectToSql();
-            Insertion("Products", false);
+
+            if (InsertBtn.Text == "Insert")
+                Insertion("Products", false);
+            else if (InsertBtn.Text == "Edit")
+                Editing();
+            CloseSqlConnection();
+
+            ConnectToSql();
+            displaySql();
             CloseSqlConnection();
         }
+
+        
 
         private void DisplayBtn_Click(object sender, EventArgs e)
         {            
@@ -1305,26 +1356,30 @@ namespace TheServer
 
         private void resetBtn_Click(object sender, EventArgs e)
         {
-            pidTxtBx.Text = "";
-            pnameTxtBt.Text = "";
-            catidTxtBx.Text = "";
-            manidTxtBx.Text = "";
-            brandTxtBx.Text = "";
-            qtyTxtBx.Text = "";
-            wtTxtBx.Text = "";
-            stkTxtBx.Text = "";
-            priceTxtBx.Text = "";
-        }
+            resettingTextBx();
+        }        
 
         private void editPic_Click(object sender, EventArgs e)
         {
-
+            ConnectToSql();
+            editFromDatabase();
+            CloseSqlConnection();
         }
 
+       
         private void delPic_Click(object sender, EventArgs e)
         {
+            ConnectToSql();
+            deleteFromDatabase();
+            CloseSqlConnection();
+
+            ConnectToSql();
+            displaySql();
+            CloseSqlConnection();
 
         }
+
+       
 
         private void InsertPresetBtn_Click(object sender, EventArgs e)
         {
@@ -1339,10 +1394,19 @@ namespace TheServer
         #region Login Events
         private void loginBtn_Click(object sender, EventArgs e)
         {
-            ConnectToSql();
-            login();
-            CloseSqlConnection();
+            if (loginBtn.Text == "Login")
+            {
+                ConnectToSql();
+                login();
+                CloseSqlConnection();
+            }
+            else if(loginBtn.Text == "LogOut")
+            {
+                logout();
+            }
         }
+
+       
 
 
         #endregion
