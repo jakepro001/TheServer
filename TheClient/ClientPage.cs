@@ -18,18 +18,22 @@ namespace TheClient
     public partial class ClientPage : Form
     {
 
+        #region Variables
         private static Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        //Thread _connectClient = new Thread(LoopConnect);
+        delegate void SetTextCallback(string text);
 
-        
+        #endregion
 
         public ClientPage()
         {
             InitializeComponent();
         }
 
-
+        /// <summary>
+        /// Client
+        /// </summary>
+        #region Client
         private void LoopConnect()
         {
             int attempts = 0;
@@ -55,41 +59,6 @@ namespace TheClient
             }
         }
 
-        delegate void SetTextCallback(string text);
-
-        public void msg(string text)
-        {
-            //Debug.WriteLine(mesg);
-            //LogLstBx.Items.Add(mesg);
-
-
-            if (this.LogLstBx.InvokeRequired)
-            {
-                SetTextCallback d = new SetTextCallback(msg);
-                this.Invoke(d, new object[] { text });
-            }
-            else
-            {
-                this.LogLstBx.Items.Add(text);
-            }
-
-        }
-
-
-        private void ConnectBtn_Click(object sender, EventArgs e)
-        {
-            LoopConnect();
-            SendLoop("div001_Initialize");
-        }
-        
-        private void SendBtn_Click(object sender, EventArgs e)
-        {
-            if (MsgTxtBx.Text != null)
-            {
-                SendLoop(MsgTxtBx.Text);
-            }
-        }
-
         private void SendLoop(string text)
         {
             Debug.WriteLine(text);
@@ -112,15 +81,14 @@ namespace TheClient
 
             if (recMsg.Contains("Search"))
             {
-                int loc = recMsg.IndexOf("_");
 
-                char[] te = recMsg.ToCharArray();
+                string[] splitMsg = recMsg.Split('_');
 
-                string price = new string(te, loc + 1, (recMsg.Length - loc - 1));
+                double price = Convert.ToDouble(splitMsg[1]);
 
-                msg(price);
+                msg(price.ToString());
 
-                SendtoPort(price);
+                SendtoPort(price.ToString());
 
 
             }
@@ -144,7 +112,7 @@ namespace TheClient
                 {
                     int j, k, l, n = 0;
 
-                    for (n = 0,j = i; te[j] != '_'; j++,n++)
+                    for (n = 0, j = i; te[j] != '_'; j++, n++)
                     {
                         tempPid[n] = te[j];
                         Debug.WriteLine(new string(tempPid));
@@ -162,7 +130,7 @@ namespace TheClient
                     Pname = new string(tempPname);
                     Debug.WriteLine(Pname);
 
-                    for (n=0,l = k + 1 ; te[l] != '$' ; l++,n++)
+                    for (n = 0, l = k + 1; te[l] != '$'; l++, n++)
                     {
                         tempPrice[n] = te[l];
                         Debug.WriteLine(new string(tempPrice));
@@ -181,14 +149,80 @@ namespace TheClient
 
         }
 
+        private void SendtoPort(string price)
+        {
+            try
+            {
+                SerialPort MyCOMPort = new SerialPort();
+
+
+                MyCOMPort.PortName = "COM6";
+                MyCOMPort.BaudRate = 115200;
+                MyCOMPort.Parity = Parity.None;
+                MyCOMPort.DataBits = 8;                  // No of Data bits = 8
+                MyCOMPort.StopBits = StopBits.One;       // No of Stop bits = 1
+
+                MyCOMPort.Open();                        // Open the port
+                MyCOMPort.Write(price);                    // Write an ascii "A"
+                MyCOMPort.Close();
+            }
+            catch(Exception ex)
+            {
+                msg("Exception In Sending to port");
+                msg(ex.Message);
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// UI Control
+        /// </summary>
+        /// <param name="text"></param>
+        #region UI Control
+        public void msg(string text)
+        {
+            //Debug.WriteLine(mesg);
+            //LogLstBx.Items.Add(mesg);
+
+
+            if (this.LogLstBx.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(msg);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                this.LogLstBx.Items.Add(text);
+            }
+
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Event Handlers
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        #region Event Handlers
+        private void ConnectBtn_Click(object sender, EventArgs e)
+        {
+            LoopConnect();
+            SendLoop("div001_Initialize");
+        }
+        
+        private void SendBtn_Click(object sender, EventArgs e)
+        {
+            if (MsgTxtBx.Text != null)
+            {
+                SendLoop(MsgTxtBx.Text);
+            }
+        }        
+
         private void MsgTxtBx_Click(object sender, EventArgs e)
         {
             MsgTxtBx.Text = "";
-        }
-
-        private void DisconnectBtn_Click(object sender, EventArgs e)
-        {
-            _clientSocket.Close();
         }
 
         private void MsgTxtBx_TextChanged(object sender, EventArgs e)
@@ -205,29 +239,34 @@ namespace TheClient
         {
             if (e.KeyCode == Keys.Enter)
             {
-                //MessageBox.Show(MsgTxtBx.Text);
-
-                string te = "div001_" + MsgTxtBx.Text;
+                string te = string.Empty;
+                if (insrtLbl.Text == "Insert")
+                    te = "div001_" + MsgTxtBx.Text + "_Insert";
+                else if (insrtLbl.Text == "Remove")
+                    te = "div001_" + MsgTxtBx.Text + "_Remove";
 
                 SendLoop(te);
+
+                MsgTxtBx.Text = "";
 
             }
         }
 
-        private void SendtoPort(string price)
+        private void InsrtBtn_Click(object sender, EventArgs e)
         {
-            SerialPort MyCOMPort = new SerialPort(); 
-
-            
-            MyCOMPort.PortName = "COM6";          
-            MyCOMPort.BaudRate = 115200;               
-            MyCOMPort.Parity = Parity.None;        
-            MyCOMPort.DataBits = 8;                  // No of Data bits = 8
-            MyCOMPort.StopBits = StopBits.One;       // No of Stop bits = 1
-
-            MyCOMPort.Open();                        // Open the port
-            MyCOMPort.Write(price);                    // Write an ascii "A"
-            MyCOMPort.Close();
+            insrtLbl.ForeColor = Color.Chartreuse;
+            insrtLbl.Text = "Insert";
         }
+
+        private void rmvBtn_Click(object sender, EventArgs e)
+        {
+            insrtLbl.ForeColor = Color.OrangeRed;
+            insrtLbl.Text = "Remove";
+        }
+
+
+        #endregion
+
+
     }
 }

@@ -13,13 +13,17 @@ using RedCorona.Net;
 using System.Net;
 using Finisar.SQLite;
 using System.Diagnostics;
+using MaterialSkin;
+using MaterialSkin.Controls;
 
 namespace TheServer
 {
-    public partial class Form1 : Form
+    public partial class TheServer : MaterialForm
     {
 
         #region The Variables
+
+        private readonly MaterialSkinManager materialSkinManager;
 
         private byte[] _buffer = new byte[1024];
         public delegate void invokeDelegate();
@@ -47,9 +51,19 @@ namespace TheServer
         #endregion
 
 
-        public Form1()
+        public TheServer()
         {
             InitializeComponent();
+
+            // Initialize MaterialSkinManager
+            materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
+
+
+            //Disabling the labels if they are enabled
+            hideLabel();
 
             //locking the ui
             disablingEverything();
@@ -58,9 +72,9 @@ namespace TheServer
 
 
         /// <summary>
-        /// The Login
+        /// The Login Logout
         /// </summary>
-        #region Login 
+        #region Login Logout
 
         //Login Section
         private void login()
@@ -73,6 +87,8 @@ namespace TheServer
 
                 sqlite_datareader = sqlite_cmd.ExecuteReader();
 
+                bool loggedIn = false;
+
                 while (sqlite_datareader.Read())
                 {
 
@@ -83,14 +99,23 @@ namespace TheServer
                             logCall(false, "Logged in");
                             enableEverything();
                             disableLogin();
+                            loggedIn = true;
                         }
                     }
                 }
+
+                if(!loggedIn)
+                {
+                    MessageBox.Show("InCorrect Username or Password", "Failed To Login");
+                    usernameTxtBx.Text = "";
+                    passwordTxtBx.Text = "";
+                }
+
             }
             catch (Exception ex)
             {
                 logCall(false, "Exception in Login");
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
         }
         private void disableLogin()
@@ -110,16 +135,18 @@ namespace TheServer
         private void disablingEverything()
         {
 
-            pictureBox3.Visible = false;
+            dashboardPicBx.Visible = false;
 
-            searchPic.Visible = false;
+            //searchPic.Visible = false;
             searchTxtBx.Visible = false;
+
+            
 
             catidTxtBx.Enabled = false;
             manidTxtBx.Enabled = false;
             brandTxtBx.Enabled = false;
             qtyTxtBx.Enabled = false;
-            pnameTxtBt.Enabled = false;
+            pnameTxtBx.Enabled = false;
             pidTxtBx.Enabled = false;
             wtTxtBx.Enabled = false;
             stkTxtBx.Enabled = false;
@@ -131,9 +158,6 @@ namespace TheServer
             InsertBtn.Enabled = false;
             resetBtn.Enabled = false;
 
-            searchPic.Enabled = false;
-            searchTxtBx.Enabled = false;
-
             tableGridVw.Enabled = false;
 
             delPic.Enabled = false;
@@ -142,21 +166,34 @@ namespace TheServer
             pictureBox15.Enabled = false;
             label5.Enabled = false;
 
+            tableGridVw.Rows.Clear();
+
+            pidTxtBx.Text = "";
+            pnameTxtBx.Text = "";
+            catidTxtBx.Text = "";
+            manidTxtBx.Text = "";
+            brandTxtBx.Text = "";
+            qtyTxtBx.Text = "";
+            wtTxtBx.Text = "";
+            stkTxtBx.Text = "";
+            priceTxtBx.Text = "";
+
+            InsertBtn.Text = "Insert";
+
         }
 
         void enableEverything()
         {
 
-            pictureBox3.Visible = true;
-
-            searchPic.Visible = true;
+            dashboardPicBx.Visible = true;
+            
             searchTxtBx.Visible = true;
 
             catidTxtBx.Enabled = true;
             manidTxtBx.Enabled = true;
             brandTxtBx.Enabled = true;
             qtyTxtBx.Enabled = true;
-            pnameTxtBt.Enabled = true;
+            pnameTxtBx.Enabled = true;
             pidTxtBx.Enabled = true;
             wtTxtBx.Enabled = true;
             stkTxtBx.Enabled = true;
@@ -168,9 +205,6 @@ namespace TheServer
             InsertBtn.Enabled = true;
             resetBtn.Enabled = true;
 
-            searchPic.Enabled = true;
-            searchTxtBx.Enabled = true;
-
             tableGridVw.Enabled = true;
 
             delPic.Enabled = true;
@@ -181,13 +215,13 @@ namespace TheServer
 
         }
 
-
         //Logout Section
         private void logout()
         {
             enableLogin();
             disablingEverything();
             logCall(false, "Logged Out");
+            MessageBox.Show("Logged Out");
         }
 
         private void enableLogin()
@@ -231,7 +265,7 @@ namespace TheServer
                 lblStatus.Text = "Server is Down";
                 lblStatus.BackColor = Color.Red;
                 logCall(false, "Server is down");
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
 
         }
@@ -252,7 +286,7 @@ namespace TheServer
             catch(Exception ex)
             {
                 logCall(false, "Client Cannot Connect");
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
         }
 
@@ -321,7 +355,7 @@ namespace TheServer
                         catch (Exception ex)
                         {
                             logCall(false, "Exception in id creation");
-                            logCall(false, ex.Message);
+                            logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                         }
 
                         //Creating Table for the connected device
@@ -355,14 +389,14 @@ namespace TheServer
                                 catch (Exception ex)
                                 {
                                     logCall(false, "Exception in creating table for the device");
-                                    logCall(false, ex.Message);
+                                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                                 }
 
                                 try
                                 {
                                     ConnectToSql();
 
-                                    sqlite_cmd.CommandText = "CREATE TABLE " + id + "(pid varchar(50), pname varchar(50), price float);";
+                                    sqlite_cmd.CommandText = "CREATE TABLE " + id + "(pid varchar(50), pname varchar(50), price float, num int);";
                                     sqlite_cmd.ExecuteNonQuery();
                                     logCall(false, "Created the table for device " + id);
 
@@ -371,7 +405,7 @@ namespace TheServer
                                 catch (Exception ex)
                                 {
                                     logCall(false, "Exception in creating table for the device");
-                                    logCall(false, ex.Message);
+                                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                                 }
 
                             }
@@ -407,7 +441,7 @@ namespace TheServer
                     }
                     catch (Exception ex)
                     {
-                        logCall(false, ex.Message);
+                        logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                     }
                     
 
@@ -430,14 +464,14 @@ namespace TheServer
                 catch (Exception ex)
                 {
                     socket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
-                    logCall(false, ex.Message);
+                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                 }
 
             }
             catch (Exception ex)
             {
                 logCall(false, "Client Disconnected");
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                 lblConUpdate(false);
             }
 
@@ -473,7 +507,6 @@ namespace TheServer
 
             return retResult;
         }
-
         
         private string DiviceHandle(string text,string id)
         {
@@ -481,28 +514,27 @@ namespace TheServer
             string barcode = string.Empty;       
             string searchKey = string.Empty;
 
-            char[] te = text.ToCharArray();
+            bool insert = true;
 
-            int loc_ = text.IndexOf('_');
-            int len = (text.Length - loc_) - 1;
-
-            barcode = new string(te,(loc_+1), len); //get the barcode
-
-            logCall(false, "Barcode : " + barcode);
-
-            te = barcode.ToCharArray();
+            if(text.Contains("Remove"))
+            {
+                insert = false;
+            }
             
-            //len = (barcode.Length - 6);
 
-            searchKey = new string(te, 6, 5);
+            string[] splitMsg = text.Split('_');
+
+            barcode = splitMsg[1];
+
+            searchKey = barcode.Substring(6, 5);
 
 
             logCall(false, "Search From Device");
             logCall(false, "key : " + searchKey);
 
 
-            ConnectToSql();
-            retResult = SearchSqlForDevice(searchKey,id);
+            ConnectToSql();            
+            retResult = SearchSqlForDevice(searchKey, id,insert);
             CloseSqlConnection();
 
             string retResultSer = "Search_" + retResult;
@@ -516,7 +548,6 @@ namespace TheServer
         }
 
         
-
 
 
         #endregion
@@ -547,7 +578,7 @@ namespace TheServer
             }
             catch (Exception ex)
             {
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
 
 
@@ -563,7 +594,7 @@ namespace TheServer
             }
             catch(Exception ex)
             {
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
 
 
@@ -581,11 +612,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: In Categories");
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
             catch(Exception ex)
             {
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
 
 
@@ -599,11 +630,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: In Products");
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
             catch (Exception ex)
             {
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
 
             //User Table
@@ -616,11 +647,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: in Users");
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
             catch (Exception ex)
             {
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
 
 
@@ -634,11 +665,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: in Dropping table");
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
             catch (Exception ex)
             {
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
 
             //Creating Cart device table
@@ -651,11 +682,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: in Creation of device table");
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
             catch (Exception ex)
             {
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
 
             //Deleting the existing Counter device table
@@ -668,11 +699,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: in Dropping table");
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
             catch (Exception ex) 
             {
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
 
             //Creating Counter device table
@@ -685,11 +716,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: in Creation of device table");
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
             catch (Exception ex)
             {
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
 
 
@@ -710,7 +741,7 @@ namespace TheServer
                 catch(Exception ex)
                 {
                     logCall(false, "Sql Exception in preSet Product insertion:");
-                    logCall(false, ex.Message);
+                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                 }
 
                 try
@@ -723,7 +754,7 @@ namespace TheServer
                 catch (Exception ex)
                 {
                     logCall(false, "Sql Exception in preSet Product insertion:");
-                    logCall(false, ex.Message);
+                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                 }
 
                 try
@@ -736,7 +767,7 @@ namespace TheServer
                 catch (Exception ex)
                 {
                     logCall(false, "Sql Exception in preSet Product insertion:");
-                    logCall(false, ex.Message);
+                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                 }
 
                 try
@@ -749,36 +780,10 @@ namespace TheServer
                 catch (Exception ex)
                 {
                     logCall(false, "Sql Exception in preSet Product insertion:");
-                    logCall(false, ex.Message);
+                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                 }
 
-                /*
-                try
-                {
-                    sqlite_cmd.CommandText = "INSERT INTO " + tname + " VALUES (1,'TIGER',100,0101,'Britannia',100,50,1000,10);";
-                    sqlite_cmd.ExecuteNonQuery();
-
-                    logCall(false, "Inserted");
-                }
-                catch (Exception ex)
-                {
-                    logCall(false, "Sql Exception in preSet Product insertion:");
-                    logCall(false, ex.Message);
-                }
-
-                try
-                {
-                    sqlite_cmd.CommandText = "INSERT INTO " + tname + " VALUES (1,'TIGER',100,0101,'Britannia',100,50,1000,10);";
-                    sqlite_cmd.ExecuteNonQuery();
-
-                    logCall(false, "Inserted");
-                }
-                catch (Exception ex)
-                {
-                    logCall(false, "Sql Exception in preSet Product insertion:");
-                    logCall(false, ex.Message);
-                }
-                */
+                
 
                 //Insertion into Users
                 try
@@ -790,7 +795,7 @@ namespace TheServer
                 catch(Exception ex)
                 {
                     logCall(false, "Exception in Insertion to Users:");
-                    logCall(false, ex.Message);
+                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                 }
 
             }
@@ -798,7 +803,7 @@ namespace TheServer
             {
                 try
                 {
-                    sqlite_cmd.CommandText = "INSERT INTO " + tname + " VALUES (" + pidTxtBx.Text + ",'" + pnameTxtBt.Text + "'," + catidTxtBx.Text + "," + manidTxtBx.Text + ",'" + brandTxtBx.Text + "'," + qtyTxtBx.Text + "," + wtTxtBx.Text + "," + stkTxtBx.Text + "," + priceTxtBx.Text + ");";
+                    sqlite_cmd.CommandText = "INSERT INTO " + tname + " VALUES (" + pidTxtBx.Text + ",'" + pnameTxtBx.Text + "'," + catidTxtBx.Text + "," + manidTxtBx.Text + ",'" + brandTxtBx.Text + "'," + qtyTxtBx.Text + "," + wtTxtBx.Text + "," + stkTxtBx.Text + "," + priceTxtBx.Text + ");";
                     System.Console.WriteLine(sqlite_cmd.CommandText);
                     sqlite_cmd.ExecuteNonQuery();
 
@@ -807,7 +812,8 @@ namespace TheServer
                 catch (Exception ex)
                 {
                     logCall(false, "Sql Exception in insertion:");
-                    logCall(false, ex.Message);
+                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                    MessageBox.Show(ex.Message, "Error In Insertion");
                 }
             }
 
@@ -824,39 +830,22 @@ namespace TheServer
             logCall(false, "Display");
 
             using (sqlite_cmd)
-            {
-                
-                //sqlite_cmd = new SQLiteCommand();
-                // First lets build a SQL-Query again:
+            {                
+             
                 sqlite_cmd.CommandText = "SELECT * FROM Products;";
 
                 sqlite_cmd.CommandTimeout = 30;
 
+
                 sqlite_cmd.CommandType = CommandType.Text;
 
-                // Now the SQLiteCommand object can give us a DataReader-Object:
                 sqlite_datareader = sqlite_cmd.ExecuteReader();
-
-                //(pid int primary key, pname varchar(30), catid int, mid int, brand varchar(50), qty float, wt float, stock float, price float, foreign key(catid) references Categories(catid)); ";
+                
 
                 tableGridVw.Rows.Clear();
-
-                // The SQLiteDataReader allows us to run through the result lines:
-                while (sqlite_datareader.Read()) // Read() returns true if there is still a result line to read
+                
+                while (sqlite_datareader.Read()) 
                 {
-                    /*
-                    // Print out the content of the text field:
-                    System.Console.WriteLine(sqlite_datareader["pid"]);
-                    System.Console.WriteLine(sqlite_datareader["pname"]);
-                    System.Console.WriteLine(sqlite_datareader["catid"]);
-                    System.Console.WriteLine(sqlite_datareader["mid"]);
-                    System.Console.WriteLine(sqlite_datareader["brand"]);
-                    System.Console.WriteLine(sqlite_datareader["qty"]);
-                    System.Console.WriteLine(sqlite_datareader["wt"]);
-                    System.Console.WriteLine(sqlite_datareader["stock"]);
-                    System.Console.WriteLine(sqlite_datareader["price"]);
-                    */
-
                     tableGridVw.Rows.Add(new object[] {
 
                         sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pid")),
@@ -874,12 +863,8 @@ namespace TheServer
 
                 }
 
-
-
-
-                // We are ready, now lets cleanup and close our connection:
+                
                 sqlite_conn.Close();
-                //sqlite_conn.Open();
 
                 logCall(false, "Complete");
                 
@@ -889,43 +874,31 @@ namespace TheServer
 
         }
 
-        private void SearchSql( bool device, string s)
+        private void SearchSql(bool device, string s)
         {
+            bool found = false;
+
+            ConnectToSql();
             using (sqlite_cmd)
             {
 
                 tableGridVw.Rows.Clear();
 
                 logCall(false, "Searching...");
-
-                // First lets build a SQL-Query again:
-                sqlite_cmd.CommandText = "SELECT * FROM Products WHERE pname LIKE '%" + s + "%';";
+                
+                sqlite_cmd.CommandText = "SELECT * FROM Products WHERE pname LIKE '%" + s + "%' OR pname LIKE '%" + s + "%'";
 
                 sqlite_cmd.CommandTimeout = 30;
 
                 sqlite_cmd.CommandType = CommandType.Text;
 
-                // Now the SQLiteCommand object can give us a DataReader-Object:
                 sqlite_datareader = sqlite_cmd.ExecuteReader();
 
-
-
-                // The SQLiteDataReader allows us to run through the result lines:
-                while (sqlite_datareader.Read()) // Read() returns true if there is still a result line to read
+                found = false;
+                
+                while (sqlite_datareader.Read()) 
                 {
-
-
-                    // Print out the content of the text field:
-                    System.Console.WriteLine(sqlite_datareader["pid"]);
-                    System.Console.WriteLine(sqlite_datareader["pname"]);
-                    System.Console.WriteLine(sqlite_datareader["catid"]);
-                    System.Console.WriteLine(sqlite_datareader["mid"]);
-                    System.Console.WriteLine(sqlite_datareader["brand"]);
-                    System.Console.WriteLine(sqlite_datareader["qty"]);
-                    System.Console.WriteLine(sqlite_datareader["wt"]);
-                    System.Console.WriteLine(sqlite_datareader["stock"]);
-                    System.Console.WriteLine(sqlite_datareader["price"]);
-
+                    found = true;
                     tableGridVw.Rows.Add(new object[] {
 
                         sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pid")),
@@ -943,6 +916,7 @@ namespace TheServer
 
 
                 }
+            }
 
 
 
@@ -950,23 +924,73 @@ namespace TheServer
 
                 sqlite_conn.Close();
 
+                if (found == false)
+                {
+                    ConnectToSql();
+                    using (sqlite_cmd)
+                    {
 
-                logCall(false, "Complete");
+                        tableGridVw.Rows.Clear();
+
+                        logCall(false, "Searching...");
+                    
+                        sqlite_cmd.CommandText = "SELECT * FROM Products WHERE pid LIKE '%" + s + "%' OR pname LIKE '%" + s + "%'";
+
+                        sqlite_cmd.CommandTimeout = 30;
+
+                        sqlite_cmd.CommandType = CommandType.Text;
+
+                        
+                        sqlite_datareader = sqlite_cmd.ExecuteReader();
+
+                        found = false;
+                    
+                        while (sqlite_datareader.Read()) 
+                        {
+                            found = true;
+                            tableGridVw.Rows.Add(new object[] {
+
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pid")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pname")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("catid")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("mid")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("brand")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("qty")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("wt")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("stock")),
+                        sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("price"))
+
+                    });
 
 
+
+                        }
+
+
+
+
+
+                        sqlite_conn.Close();
+
+
+                        logCall(false, "Complete");
+
+
+                    }
+                }
+
+            if(found == false)
+            {
+                MessageBox.Show("Not Found");
             }
 
 
-            
+
+           
         }
 
-        private string SearchSqlForDevice(string searchKey, string id)
+        private string SearchSqlForDevice(string searchKey, string id, bool insert)
         {
-
-            /// The format of search will be as
-            ///If it is a search from the insie of the application, then it will be the name of the product
-            ///
-            ///If the search is from the Device, then the pid will be searched            
 
             string RetString = string.Empty;
 
@@ -997,44 +1021,137 @@ namespace TheServer
                         //RetString = sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pname")).ToString() + "_" + sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("price")).ToString();
                         RetString = sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("price")).ToString();
                         pname = sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pname")).ToString();
-                        price = sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("price")).ToString();
+                        price = sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("price")).ToString();                        
                     }
                     catch (Exception ex)
                     {
                         logCall(false, "Exception in device req search inside while");
-                        logCall(false, ex.Message);
+                        logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                     }
 
                 }
 
                 CloseSqlConnection();
 
-                if (RetString != string.Empty)
+                int count = 0;
+                //Searching wheather exist
+                try
                 {
+                    ConnectToSql();
+                    sqlite_cmd.CommandText = "SELECT pid,num FROM " + id + " WHERE pid = " + searchKey + ";";
+                    sqlite_datareader = sqlite_cmd.ExecuteReader();
+
+                    logCall(false, "In removal/updation, Searching if it exist");
+
+                    searchKey = searchKey.ToLower();
+
+                    while (sqlite_datareader.Read())
+                    {
+                        count = 0;
+                        if (sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pid")).ToString().ToLower().Equals(searchKey))
+                        {
+                            string num = sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("num")).ToString();
+                            count = Int32.Parse(num);                            
+                            break;
+                        }
+                    }
+                    logCall(false, "No of Existing Pids = " + count.ToString());
+                    CloseSqlConnection();
+                }
+                catch (SQLiteException ex)
+                {
+                    logCall(false, "Sql Exception in Removal");
+                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                }
+                catch (Exception ex)
+                {
+                    logCall(false, "Exception in Removal");
+                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                }
+
+
+
+                if (RetString != string.Empty && insert)
+                {
+                    //Insertion/Updation into device
                     try
                     {
-                        ConnectToSql();
-                        sqlite_cmd.CommandText = "INSERT INTO " + id + " VALUES( '" + searchKey + "', '" + pname + "', '" + price + "');";
-                        sqlite_cmd.ExecuteNonQuery();
-                        CloseSqlConnection();
+                        if (count == 0) //Insert
+                        {
+                            logCall(false, "Inserting");
+                            count++;
+                            ConnectToSql();
+                            sqlite_cmd.CommandText = "INSERT INTO " + id + " VALUES( '" + searchKey + "', '" + pname + "', '" + price + "', " + count.ToString() +");";
+                            sqlite_cmd.ExecuteNonQuery();
+                            CloseSqlConnection();
+                        }
+                        else //Update
+                        {
+                            logCall(false, "Updating");
+                            count++;
+                            ConnectToSql();
+                            sqlite_cmd.CommandText = "UPDATE " + id + " SET num = " + count.ToString() + " WHERE pid = " + searchKey + ";";
+                            sqlite_cmd.ExecuteNonQuery();
+                            CloseSqlConnection();
+                        }
                     }
                     catch (Exception ex)
                     {
-                        logCall(false, "Exception in insertion from the device");
-                        logCall(false, ex.Message);
+                        logCall(false, "Exception in insertion/updation from the device");
+                        logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                     }
+                }
+                else if(RetString != string.Empty && !insert)
+                {
+                    
+
+                    //Deletion/Updation from device
+                    try
+                    {
+                        ConnectToSql();
+
+                        if (count == 1)
+                        {
+                            //Delete
+                            sqlite_cmd.CommandText = "DELETE FROM " + id + " WHERE pid = " + searchKey + ";";
+                            logCall(false, "Deletion acc to device req");
+                        }
+                        else
+                        {
+                            //Update
+                            count--;
+                            sqlite_cmd.CommandText = "UPDATE " + id + " SET num = " + count.ToString()+"WHERE pid = " + searchKey + ";";
+                            logCall(false, "Updation acc to device req");
+                        }
+
+                        sqlite_cmd.ExecuteNonQuery();                       
+
+                        RetString = "-" + RetString;
+
+                        logCall(false, "Removed/Updated from the " + id + " table");
+                        CloseSqlConnection();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        logCall(false, "Exception in Deletion/Updation from the device");
+                        logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                    }
+
                 }
 
             }
             catch (Exception ex)
             {
                 logCall(false, "Exception in searching by device request");
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
+            
 
             return RetString;
         }
-        private string deviceDatabaseReturning(string req)
+
+        private string deviceDatabaseReturning(string id)
         {
             logCall(false, "In the database return func");
 
@@ -1044,7 +1161,7 @@ namespace TheServer
             {
                 try
                 {
-                    sqlite_cmd.CommandText = "SELECT * FROM " + req + " ;";
+                    sqlite_cmd.CommandText = "SELECT * FROM " + id + " ;";
                     sqlite_cmd.CommandTimeout = 30;
                     sqlite_cmd.CommandType = CommandType.Text;
 
@@ -1056,21 +1173,23 @@ namespace TheServer
                     {
                         try
                         {
-                            retResults += sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pid")).ToString() + "_" + sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pname")).ToString() + "@" + sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("price")).ToString()+"$";                                                   
+                            retResults += sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pid")).ToString() + "_" + sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("pname")).ToString() + "_" + sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("price")).ToString() + "_" + sqlite_datareader.GetValue(sqlite_datareader.GetOrdinal("num")).ToString() + "_";
                         }
                         catch(Exception ex)
                         {
                             logCall(false, "Exception in while in database returning : Not found");
-                            logCall(false, ex.Message);
+                            logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                         }
                     }
+
+                    retResults = "Device_" + retResults;
 
 
                 }
                 catch(Exception ex)
                 {
                     logCall(false, "Exception in Database returning according to the req from counter");
-                    logCall(false, ex.Message);
+                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                 }
             }
                        
@@ -1087,7 +1206,6 @@ namespace TheServer
 
             return retResults;
         }
-
 
         private void deleteFromDatabase()
         {
@@ -1109,17 +1227,18 @@ namespace TheServer
                     catch(SQLiteException ex)
                     {
                         logCall(false, "Sql Exception in Deletion");
-                        logCall(false, ex.Message);
+                        logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                     }
                     catch(Exception ex)
                     {
                         logCall(false, "Exception in Deletion");
-                        logCall(false, ex.Message);
+                        logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                     }
 
                 }
             }            
         }
+
         private void editFromDatabase()
         {
             Int32 selectedCellCount = tableGridVw.GetCellCount(DataGridViewElementStates.Selected);
@@ -1145,7 +1264,7 @@ namespace TheServer
 
                         //MessageBox.Show(row.Cells[1].Value.ToString());
                           pidTxtBx.Text = row.Cells[0].Value.ToString();
-                        pnameTxtBt.Text = row.Cells[1].Value.ToString();
+                        pnameTxtBx.Text = row.Cells[1].Value.ToString();
                         catidTxtBx.Text = row.Cells[2].Value.ToString();
                         manidTxtBx.Text = row.Cells[3].Value.ToString();
                         brandTxtBx.Text = row.Cells[4].Value.ToString();
@@ -1169,7 +1288,7 @@ namespace TheServer
         {
             try
             {                
-                sqlite_cmd.CommandText = "UPDATE Products SET pid = " + pidTxtBx.Text + ", pname = '" + pnameTxtBt.Text + "', catid = " + catidTxtBx.Text + ", mid = " + manidTxtBx.Text + ",brand = '"+brandTxtBx.Text+"', qty = " + qtyTxtBx.Text + ",wt=" + wtTxtBx.Text + ",stock = " + stkTxtBx.Text + ", price = " + priceTxtBx.Text + " WHERE pid = " + pidTxtBx.Text + ";";
+                sqlite_cmd.CommandText = "UPDATE Products SET pid = " + pidTxtBx.Text + ", pname = '" + pnameTxtBx.Text + "', catid = " + catidTxtBx.Text + ", mid = " + manidTxtBx.Text + ",brand = '"+brandTxtBx.Text+"', qty = " + qtyTxtBx.Text + ",wt=" + wtTxtBx.Text + ",stock = " + stkTxtBx.Text + ", price = " + priceTxtBx.Text + " WHERE pid = " + pidTxtBx.Text + ";";
                 sqlite_cmd.ExecuteNonQuery();                
 
                 logCall(false, "Database Upddated");
@@ -1181,11 +1300,10 @@ namespace TheServer
             catch (Exception ex)
             {
                 logCall(false, "Sql Exception in Editting : ");
-                logCall(false, ex.Message);
+                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
             }
 
         }
-
 
         public void CloseSqlConnection()
         {
@@ -1250,7 +1368,7 @@ namespace TheServer
         private void resettingTextBx()
         {
             pidTxtBx.Text = "";
-            pnameTxtBt.Text = "";
+            pnameTxtBx.Text = "";
             catidTxtBx.Text = "";
             manidTxtBx.Text = "";
             brandTxtBx.Text = "";
@@ -1258,6 +1376,18 @@ namespace TheServer
             wtTxtBx.Text = "";
             stkTxtBx.Text = "";
             priceTxtBx.Text = "";
+
+            hideLabel();
+        }
+
+        private void visibleLabel()
+        {
+            pidLbl.Visible = pnameLbl.Visible = catidLbl.Visible = manidLbl.Visible = brandLbl.Visible = qtyLbl.Visible = qtyLbl.Visible = wtLbl.Visible = stkLbl.Visible = priceLbl.Visible =  true;           
+        }
+
+        private void hideLabel()
+        {
+            pidLbl.Visible = pnameLbl.Visible = catidLbl.Visible = manidLbl.Visible = brandLbl.Visible = qtyLbl.Visible = qtyLbl.Visible = wtLbl.Visible = stkLbl.Visible = priceLbl.Visible = false;           
         }
 
 
@@ -1275,7 +1405,7 @@ namespace TheServer
         #region Form Events
         private void frmMain_Load(object sender, EventArgs e)
         {
-            StartServer();
+            StartServer();            
         }       
 
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
@@ -1287,6 +1417,7 @@ namespace TheServer
         {
            
         }
+        
         #endregion
 
         #region ServerEvents
@@ -1317,15 +1448,16 @@ namespace TheServer
             if (InsertBtn.Text == "Insert")
                 Insertion("Products", false);
             else if (InsertBtn.Text == "Edit")
+            {
                 Editing();
+                hideLabel();
+            }
             CloseSqlConnection();
 
             ConnectToSql();
             displaySql();
             CloseSqlConnection();
-        }
-
-        
+        }        
 
         private void DisplayBtn_Click(object sender, EventArgs e)
         {            
@@ -1339,8 +1471,11 @@ namespace TheServer
             CloseSqlConnection();
         }
 
-        
 
+        private void searchTxtBx_Leave(object sender, EventArgs e)
+        {
+            searchTxtBx.Text = "";
+        }
         private void searchPic_Click(object sender, EventArgs e)
         {
             ConnectToSql();
@@ -1349,24 +1484,40 @@ namespace TheServer
             CloseSqlConnection();
         }
 
+        private void searchTxtBx_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ConnectToSql();
+                string s = searchTxtBx.Text;
+                SearchSql(false, s);
+                CloseSqlConnection();
+            }
+            else if(e.KeyCode == Keys.Escape)
+            {
+                label1.Focus();
+            }
+        }
+
         private void searchTxtBx_Click(object sender, EventArgs e)
         {
-            searchTxtBx.Text = "";
+            //searchTxtBx.Text = "";
         }
 
         private void resetBtn_Click(object sender, EventArgs e)
         {
             resettingTextBx();
+            InsertBtn.Text = "Insert";
         }        
 
         private void editPic_Click(object sender, EventArgs e)
         {
+            visibleLabel();
             ConnectToSql();
             editFromDatabase();
-            CloseSqlConnection();
+            CloseSqlConnection();            
         }
 
-       
         private void delPic_Click(object sender, EventArgs e)
         {
             ConnectToSql();
@@ -1378,7 +1529,6 @@ namespace TheServer
             CloseSqlConnection();
 
         }
-
        
 
         private void InsertPresetBtn_Click(object sender, EventArgs e)
@@ -1406,13 +1556,24 @@ namespace TheServer
             }
         }
 
-       
+
+        private void passwordTxtBx_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ConnectToSql();
+                login();
+                CloseSqlConnection();
+            }
+        }
+
+
+
+
 
 
         #endregion
 
         #endregion
-
-
     }
 }

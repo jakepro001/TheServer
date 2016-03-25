@@ -121,4 +121,7 @@
   <data name="Christmas HD Wallpapers 1920x1200 (24)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Christmas HD Wallpapers 1920x1200 (24).jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="w" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
