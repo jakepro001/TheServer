@@ -115,7 +115,7 @@ namespace TheServer
             catch (Exception ex)
             {
                 logCall(false, "Exception in Login");
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
         }
         private void disableLogin()
@@ -265,7 +265,7 @@ namespace TheServer
                 lblStatus.Text = "Server is Down";
                 lblStatus.BackColor = Color.Red;
                 logCall(false, "Server is down");
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
 
         }
@@ -286,7 +286,7 @@ namespace TheServer
             catch(Exception ex)
             {
                 logCall(false, "Client Cannot Connect");
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
         }
 
@@ -355,7 +355,7 @@ namespace TheServer
                         catch (Exception ex)
                         {
                             logCall(false, "Exception in id creation");
-                            logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                            logCall(false, ex.Message); 
                         }
 
                         //Creating Table for the connected device
@@ -389,7 +389,7 @@ namespace TheServer
                                 catch (Exception ex)
                                 {
                                     logCall(false, "Exception in creating table for the device");
-                                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                                    logCall(false, ex.Message);
                                 }
 
                                 try
@@ -405,7 +405,7 @@ namespace TheServer
                                 catch (Exception ex)
                                 {
                                     logCall(false, "Exception in creating table for the device");
-                                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                                    logCall(false, ex.Message); 
                                 }
 
                             }
@@ -441,7 +441,7 @@ namespace TheServer
                     }
                     catch (Exception ex)
                     {
-                        logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                        logCall(false, ex.Message); 
                     }
                     
 
@@ -464,14 +464,14 @@ namespace TheServer
                 catch (Exception ex)
                 {
                     socket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
-                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                    logCall(false, ex.Message); 
                 }
 
             }
             catch (Exception ex)
             {
                 logCall(false, "Client Disconnected");
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
                 lblConUpdate(false);
             }
 
@@ -503,7 +503,10 @@ namespace TheServer
             retResult = deviceDatabaseReturning(req);
             CloseSqlConnection();
 
-            
+            if(retResult == string.Empty || retResult == "" || retResult == null)
+            {
+                retResult = "Nill";
+            }
 
             return retResult;
         }
@@ -578,7 +581,7 @@ namespace TheServer
             }
             catch (Exception ex)
             {
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
 
 
@@ -594,7 +597,7 @@ namespace TheServer
             }
             catch(Exception ex)
             {
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
 
 
@@ -612,11 +615,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: In Categories");
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
             catch(Exception ex)
             {
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
 
 
@@ -630,11 +633,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: In Products");
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
             catch (Exception ex)
             {
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
 
             //User Table
@@ -647,11 +650,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: in Users");
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
             catch (Exception ex)
             {
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
 
 
@@ -665,11 +668,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: in Dropping table");
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
             catch (Exception ex)
             {
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
 
             //Creating Cart device table
@@ -682,11 +685,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: in Creation of device table");
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
             catch (Exception ex)
             {
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
 
             //Deleting the existing Counter device table
@@ -699,11 +702,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: in Dropping table");
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
             catch (Exception ex) 
             {
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
 
             //Creating Counter device table
@@ -716,11 +719,11 @@ namespace TheServer
             catch (SQLiteException ex)
             {
                 logCall(false, "SQL Exception: in Creation of device table");
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
             catch (Exception ex)
             {
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
 
 
@@ -798,16 +801,32 @@ namespace TheServer
                     logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
                 }
 
+                ConnectToSql();
+                displaySql();
+                CloseSqlConnection();
+
             }
-            else
+            else //Inserting from the text boxes
             {
                 try
                 {
-                    sqlite_cmd.CommandText = "INSERT INTO " + tname + " VALUES (" + pidTxtBx.Text + ",'" + pnameTxtBx.Text + "'," + catidTxtBx.Text + "," + manidTxtBx.Text + ",'" + brandTxtBx.Text + "'," + qtyTxtBx.Text + "," + wtTxtBx.Text + "," + stkTxtBx.Text + "," + priceTxtBx.Text + ");";
-                    System.Console.WriteLine(sqlite_cmd.CommandText);
-                    sqlite_cmd.ExecuteNonQuery();
+                    if (pidTxtBx.Text != "" && pnameTxtBx.Text != "" && catidTxtBx.Text != "" && manidTxtBx.Text != "" && catidTxtBx.Text != "" && brandTxtBx.Text != "" && qtyTxtBx.Text != "" && wtTxtBx.Text != "" && stkTxtBx.Text != "" && priceTxtBx.Text != "")
+                    {
+                        sqlite_cmd.CommandText = "INSERT INTO " + tname + " VALUES (" + pidTxtBx.Text + ",'" + pnameTxtBx.Text + "'," + catidTxtBx.Text + "," + manidTxtBx.Text + ",'" + brandTxtBx.Text + "'," + qtyTxtBx.Text + "," + wtTxtBx.Text + "," + stkTxtBx.Text + "," + priceTxtBx.Text + ");";                        
+                        sqlite_cmd.ExecuteNonQuery();
 
-                    logCall(false, "Inserted");
+                        logCall(false, "Inserted");
+
+                        ConnectToSql();
+                        displaySql();
+                        CloseSqlConnection();
+
+                    }
+                    else
+                    {
+                        logCall(false, "Data Not Complete");
+                        MessageBox.Show("Data Not Complete", "Error");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -816,11 +835,6 @@ namespace TheServer
                     MessageBox.Show(ex.Message, "Error In Insertion");
                 }
             }
-
-            ConnectToSql();
-            displaySql();
-            CloseSqlConnection();
-
 
         }        
 
@@ -1026,7 +1040,7 @@ namespace TheServer
                     catch (Exception ex)
                     {
                         logCall(false, "Exception in device req search inside while");
-                        logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                        logCall(false, ex.Message); 
                     }
 
                 }
@@ -1061,12 +1075,12 @@ namespace TheServer
                 catch (SQLiteException ex)
                 {
                     logCall(false, "Sql Exception in Removal");
-                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                    logCall(false, ex.Message); 
                 }
                 catch (Exception ex)
                 {
                     logCall(false, "Exception in Removal");
-                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                    logCall(false, ex.Message); 
                 }
 
 
@@ -1098,7 +1112,7 @@ namespace TheServer
                     catch (Exception ex)
                     {
                         logCall(false, "Exception in insertion/updation from the device");
-                        logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                        logCall(false, ex.Message); 
                     }
                 }
                 else if(RetString != string.Empty && !insert)
@@ -1135,7 +1149,7 @@ namespace TheServer
                     catch (Exception ex)
                     {
                         logCall(false, "Exception in Deletion/Updation from the device");
-                        logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                        logCall(false, ex.Message); 
                     }
 
                 }
@@ -1144,7 +1158,7 @@ namespace TheServer
             catch (Exception ex)
             {
                 logCall(false, "Exception in searching by device request");
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
             
 
@@ -1178,7 +1192,7 @@ namespace TheServer
                         catch(Exception ex)
                         {
                             logCall(false, "Exception in while in database returning : Not found");
-                            logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                            logCall(false, ex.Message); 
                         }
                     }
 
@@ -1189,7 +1203,7 @@ namespace TheServer
                 catch(Exception ex)
                 {
                     logCall(false, "Exception in Database returning according to the req from counter");
-                    logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                    logCall(false, ex.Message); 
                 }
             }
                        
@@ -1227,12 +1241,12 @@ namespace TheServer
                     catch(SQLiteException ex)
                     {
                         logCall(false, "Sql Exception in Deletion");
-                        logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                        logCall(false, ex.Message); 
                     }
                     catch(Exception ex)
                     {
                         logCall(false, "Exception in Deletion");
-                        logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                        logCall(false, ex.Message); 
                     }
 
                 }
@@ -1300,7 +1314,7 @@ namespace TheServer
             catch (Exception ex)
             {
                 logCall(false, "Sql Exception in Editting : ");
-                logCall(false, ex.Message); MessageBox.Show(ex.Message,"Exception");
+                logCall(false, ex.Message); 
             }
 
         }
@@ -1454,9 +1468,11 @@ namespace TheServer
             }
             CloseSqlConnection();
 
+            /*
             ConnectToSql();
             displaySql();
             CloseSqlConnection();
+            */
         }        
 
         private void DisplayBtn_Click(object sender, EventArgs e)
@@ -1471,11 +1487,11 @@ namespace TheServer
             CloseSqlConnection();
         }
 
-
         private void searchTxtBx_Leave(object sender, EventArgs e)
         {
             searchTxtBx.Text = "";
         }
+
         private void searchPic_Click(object sender, EventArgs e)
         {
             ConnectToSql();
@@ -1528,8 +1544,7 @@ namespace TheServer
             displaySql();
             CloseSqlConnection();
 
-        }
-       
+        }       
 
         private void InsertPresetBtn_Click(object sender, EventArgs e)
         {
@@ -1538,6 +1553,172 @@ namespace TheServer
             CloseSqlConnection();
         }
 
+
+        #endregion
+
+        #region UI - Material
+
+        private void MakeNewmericKeypress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void pidTxtBx_Enter(object sender, EventArgs e)
+        {
+            pidLbl.Visible = true;
+        }
+
+        private void pidTxtBx_Leave(object sender, EventArgs e)
+        {
+            if (pidTxtBx.Text == "")
+            {
+                pidLbl.Visible = false;
+            }
+            else
+            {
+                pidLbl.Visible = true;
+            }
+        }
+
+        private void pnameTxtBx_Enter(object sender, EventArgs e)
+        {
+            pnameLbl.Visible = true;
+        }
+
+        private void pnameTxtBx_Leave(object sender, EventArgs e)
+        {
+            if (pnameTxtBx.Text == "")
+            {
+                pnameLbl.Visible = false;
+            }
+            else
+            {
+                pnameLbl.Visible = true;
+            }
+
+        }
+
+        private void catidTxtBx_Enter(object sender, EventArgs e)
+        {
+            catidLbl.Visible = true;
+        }
+
+        private void catidTxtBx_Leave(object sender, EventArgs e)
+        {
+            if (catidTxtBx.Text == "")
+            {
+                catidLbl.Visible = false;
+            }
+            else
+            {
+                catidLbl.Visible = true;
+            }
+        }
+
+        private void manidTxtBx_Enter(object sender, EventArgs e)
+        {
+            manidLbl.Visible = true;
+        }
+
+        private void manidTxtBx_Leave(object sender, EventArgs e)
+        {
+            if (manidTxtBx.Text == "")
+            {
+                manidLbl.Visible = false;
+            }
+            else
+            {
+                manidLbl.Visible = true;
+            }
+        }
+
+        private void brandTxtBx_Enter(object sender, EventArgs e)
+        {
+            brandLbl.Visible = true;
+        }
+
+        private void brandTxtBx_Leave(object sender, EventArgs e)
+        {
+            if (brandTxtBx.Text == "")
+            {
+                brandLbl.Visible = false;
+            }
+            else
+            {
+                brandLbl.Visible = true;
+            }
+        }
+
+        private void qtyTxtBx_Enter(object sender, EventArgs e)
+        {
+            qtyLbl.Visible = true;
+        }
+
+        private void qtyTxtBx_Leave(object sender, EventArgs e)
+        {
+            if (qtyTxtBx.Text == "")
+            {
+                qtyLbl.Visible = false;
+            }
+            else
+            {
+                qtyLbl.Visible = true;
+            }
+        }
+
+        private void wtTxtBx_Enter(object sender, EventArgs e)
+        {
+            wtLbl.Visible = true;
+        }
+
+        private void wtTxtBx_Leave(object sender, EventArgs e)
+        {
+            if (wtTxtBx.Text == "")
+            {
+                wtLbl.Visible = false;
+            }
+            else
+            {
+                wtTxtBx.Visible = true;
+            }
+        }
+
+        private void stkTxtBx_Enter(object sender, EventArgs e)
+        {
+            stkLbl.Visible = true;
+        }
+
+        private void stkTxtBx_Leave(object sender, EventArgs e)
+        {
+            if (stkTxtBx.Text == "")
+            {
+                stkLbl.Visible = false;
+            }
+            else
+            {
+                stkLbl.Visible = true;
+            }
+        }
+
+        private void priceTxtBx_Enter(object sender, EventArgs e)
+        {
+            priceLbl.Visible = true;
+        }
+
+        private void priceTxtBx_Leave(object sender, EventArgs e)
+        {
+            if (priceTxtBx.Text == "")
+            {
+                priceLbl.Visible = false;
+            }
+            else
+            {
+                priceLbl.Visible = true;
+            }
+        }
 
         #endregion
 
@@ -1572,8 +1753,11 @@ namespace TheServer
 
 
 
+
         #endregion
 
         #endregion
+
+       
     }
 }

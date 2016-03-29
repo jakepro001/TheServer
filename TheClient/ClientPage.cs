@@ -21,7 +21,13 @@ namespace TheClient
         #region Variables
         private static Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        delegate void SetTextCallback(string text);
+        //delegate void SetTextCallback(string text);
+
+        public delegate void invokeDelegate();
+
+        SerialPort MyCOMPort;
+
+        byte[] data;
 
         #endregion
 
@@ -45,23 +51,23 @@ namespace TheClient
                     {
                         attempts++;
                         _clientSocket.Connect(IPAddress.Loopback, 100);
-                        msg("Server Connected...");
+                        logCall(false,"Server Connected...");
+                        ListenToPort();
                     }
                     catch
                     {
-                        msg("Connection attempts : " + attempts.ToString());
+                        logCall(false,"Connection attempts : " + attempts.ToString());
                     }
                 }
             }
             catch (Exception ex)
             {
-                msg("Failed Attempts >>" + ex.Message);
+                logCall(false,"Failed Attempts >>" + ex.Message);
             }
         }
-
         private void SendLoop(string text)
         {
-            Debug.WriteLine(text);
+            //Debug.WriteLine(text);
 
             byte[] buffer = Encoding.ASCII.GetBytes(text);
             _clientSocket.Send(buffer);
@@ -76,7 +82,7 @@ namespace TheClient
 
             string recMsg = Encoding.ASCII.GetString(data);
 
-            msg("Recieved : " + recMsg);
+            logCall(false,recMsg);
 
 
             if (recMsg.Contains("Search"))
@@ -86,7 +92,7 @@ namespace TheClient
 
                 double price = Convert.ToDouble(splitMsg[1]);
 
-                msg(price.ToString());
+                logCall(false,price.ToString());
 
                 SendtoPort(price.ToString());
 
@@ -141,7 +147,7 @@ namespace TheClient
 
                     i = l;
 
-                    msg(Pid + Pname + Price);
+                    logCall(false, Pid + Pname + Price);
 
                 }
 
@@ -149,29 +155,92 @@ namespace TheClient
 
         }
 
+        #endregion
+
+        /// <summary>
+        /// Serial Port
+        /// </summary>
+        /// <param name="price"></param>
+        #region Serial Port
+
         private void SendtoPort(string price)
         {
             try
-            {
-                SerialPort MyCOMPort = new SerialPort();
-
-
-                MyCOMPort.PortName = "COM6";
-                MyCOMPort.BaudRate = 115200;
-                MyCOMPort.Parity = Parity.None;
-                MyCOMPort.DataBits = 8;                  // No of Data bits = 8
-                MyCOMPort.StopBits = StopBits.One;       // No of Stop bits = 1
-
-                MyCOMPort.Open();                        // Open the port
-                MyCOMPort.Write(price);                    // Write an ascii "A"
-                MyCOMPort.Close();
+            {                    
+                MyCOMPort.Write(price);
             }
             catch(Exception ex)
             {
-                msg("Exception In Sending to port");
-                msg(ex.Message);
+                logCall(false,"Exception In Sending to port");
+                logCall(false, ex.Message);
             }
         }
+
+        private void ListenToPort()
+        {
+            try
+            {
+                if (MyCOMPort == null)
+                {
+                    MyCOMPort = new SerialPort();
+
+                    MyCOMPort.PortName = "COM6";
+                    MyCOMPort.BaudRate = 115200;
+                    MyCOMPort.Parity = Parity.None;
+                    MyCOMPort.DataBits = 8;
+                    MyCOMPort.StopBits = StopBits.One;
+                }
+
+                if (MyCOMPort.IsOpen)
+                {
+                    MyCOMPort.Close();
+                }
+
+                if (!MyCOMPort.IsOpen)
+                    MyCOMPort.Open();
+
+                MyCOMPort.DataReceived += new SerialDataReceivedEventHandler(SerialPortDataRecieved);
+            }
+            catch(Exception ex)
+            {
+                logCall(false,"Exceptin in listen to port");
+                logCall(false,ex.Message);
+            }
+        }
+
+        private void SerialPortDataRecieved(object sender, SerialDataReceivedEventArgs e)
+        {
+            int dataLength = MyCOMPort.BytesToRead;
+            data = new byte[dataLength];
+            int nbrDataRead = MyCOMPort.Read(data, 0, dataLength);
+            if (nbrDataRead == 0)
+                return;
+
+            string text = Encoding.ASCII.GetString(data);
+
+            Debug.WriteLine("Rec frm COM : " + text);
+            logCall(false,"Rec frm COM : " + text);
+
+            text = text.ToLower();
+            if(text.Contains("insert"))
+            {
+                insrtLbl.ForeColor = Color.Chartreuse;
+                insrtLbl.Text = "Insert";
+            }
+            else if(text.Contains("remove"))
+            {
+                insrtLbl.ForeColor = Color.OrangeRed;
+                insrtLbl.Text = "Remove";
+            }
+            else
+            {
+                logCall(false,"Exception in data recieved from COM");
+            }
+
+
+        }
+
+        
 
         #endregion
 
@@ -179,23 +248,29 @@ namespace TheClient
         /// UI Control
         /// </summary>
         /// <param name="text"></param>
-        #region UI Control
-        public void msg(string text)
+        #region UI Control        
+        //For Log calls
+        public void logCall(bool sent, string text)
         {
-            //Debug.WriteLine(mesg);
-            //LogLstBx.Items.Add(mesg);
-
-
-            if (this.LogLstBx.InvokeRequired)
+            invokeDelegate del = () =>
             {
-                SetTextCallback d = new SetTextCallback(msg);
-                this.Invoke(d, new object[] { text });
-            }
-            else
+                logData(sent, text);
+            };
+            Invoke(del);
+        }
+        public void logData(bool sent, string text)
+        {
+            txtLog.Text += "\r\n" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss tt") + (sent ? " SENT:\r\n" : " RECEIVED:\r\n");
+            txtLog.Text += text;
+            txtLog.Text += "\r\n";
+            if (txtLog.Lines.Length > 500)
             {
-                this.LogLstBx.Items.Add(text);
+                string[] temp = new string[500];
+                Array.Copy(txtLog.Lines, txtLog.Lines.Length - 500, temp, 0, 500);
+                txtLog.Lines = temp;
             }
-
+            txtLog.SelectionStart = txtLog.Text.Length;
+            txtLog.ScrollToCaret();
         }
 
         #endregion
@@ -206,6 +281,12 @@ namespace TheClient
         /// <param name="sender"></param>
         /// <param name="e"></param>
         #region Event Handlers
+
+        private void ClientPage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(MyCOMPort.IsOpen)
+                MyCOMPort.Close();
+        }
         private void ConnectBtn_Click(object sender, EventArgs e)
         {
             LoopConnect();
@@ -265,8 +346,9 @@ namespace TheClient
         }
 
 
+
         #endregion
 
-
+        
     }
 }

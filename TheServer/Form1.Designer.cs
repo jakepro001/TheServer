@@ -591,7 +591,9 @@ namespace TheServer
             this.pidTxtBx.Size = new System.Drawing.Size(190, 23);
             this.pidTxtBx.TabIndex = 5;
             this.pidTxtBx.UseSystemPasswordChar = false;
+            this.pidTxtBx.Enter += new System.EventHandler(this.pidTxtBx_Enter);
             this.pidTxtBx.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchTxtBx_KeyDown);
+            this.pidTxtBx.Leave += new System.EventHandler(this.pidTxtBx_Leave);
             // 
             // pnameTxtBx
             // 
@@ -607,7 +609,9 @@ namespace TheServer
             this.pnameTxtBx.Size = new System.Drawing.Size(190, 23);
             this.pnameTxtBx.TabIndex = 6;
             this.pnameTxtBx.UseSystemPasswordChar = false;
+            this.pnameTxtBx.Enter += new System.EventHandler(this.pnameTxtBx_Enter);
             this.pnameTxtBx.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchTxtBx_KeyDown);
+            this.pnameTxtBx.Leave += new System.EventHandler(this.pnameTxtBx_Leave);
             // 
             // catidTxtBx
             // 
@@ -623,7 +627,9 @@ namespace TheServer
             this.catidTxtBx.Size = new System.Drawing.Size(190, 23);
             this.catidTxtBx.TabIndex = 7;
             this.catidTxtBx.UseSystemPasswordChar = false;
+            this.catidTxtBx.Enter += new System.EventHandler(this.catidTxtBx_Enter);
             this.catidTxtBx.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchTxtBx_KeyDown);
+            this.catidTxtBx.Leave += new System.EventHandler(this.catidTxtBx_Leave);
             // 
             // manidTxtBx
             // 
@@ -639,7 +645,9 @@ namespace TheServer
             this.manidTxtBx.Size = new System.Drawing.Size(190, 23);
             this.manidTxtBx.TabIndex = 8;
             this.manidTxtBx.UseSystemPasswordChar = false;
+            this.manidTxtBx.Enter += new System.EventHandler(this.manidTxtBx_Enter);
             this.manidTxtBx.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchTxtBx_KeyDown);
+            this.manidTxtBx.Leave += new System.EventHandler(this.manidTxtBx_Leave);
             // 
             // brandTxtBx
             // 
@@ -655,7 +663,9 @@ namespace TheServer
             this.brandTxtBx.Size = new System.Drawing.Size(190, 23);
             this.brandTxtBx.TabIndex = 9;
             this.brandTxtBx.UseSystemPasswordChar = false;
+            this.brandTxtBx.Enter += new System.EventHandler(this.brandTxtBx_Enter);
             this.brandTxtBx.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchTxtBx_KeyDown);
+            this.brandTxtBx.Leave += new System.EventHandler(this.brandTxtBx_Leave);
             // 
             // qtyTxtBx
             // 
@@ -671,7 +681,10 @@ namespace TheServer
             this.qtyTxtBx.Size = new System.Drawing.Size(190, 23);
             this.qtyTxtBx.TabIndex = 10;
             this.qtyTxtBx.UseSystemPasswordChar = false;
+            this.qtyTxtBx.Enter += new System.EventHandler(this.qtyTxtBx_Enter);
             this.qtyTxtBx.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchTxtBx_KeyDown);
+            this.qtyTxtBx.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MakeNewmericKeypress);
+            this.qtyTxtBx.Leave += new System.EventHandler(this.qtyTxtBx_Leave);
             // 
             // wtTxtBx
             // 
@@ -687,7 +700,10 @@ namespace TheServer
             this.wtTxtBx.Size = new System.Drawing.Size(190, 23);
             this.wtTxtBx.TabIndex = 11;
             this.wtTxtBx.UseSystemPasswordChar = false;
+            this.wtTxtBx.Enter += new System.EventHandler(this.wtTxtBx_Enter);
             this.wtTxtBx.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchTxtBx_KeyDown);
+            this.wtTxtBx.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MakeNewmericKeypress);
+            this.wtTxtBx.Leave += new System.EventHandler(this.wtTxtBx_Leave);
             // 
             // stkTxtBx
             // 
@@ -703,7 +719,10 @@ namespace TheServer
             this.stkTxtBx.Size = new System.Drawing.Size(190, 23);
             this.stkTxtBx.TabIndex = 12;
             this.stkTxtBx.UseSystemPasswordChar = false;
+            this.stkTxtBx.Enter += new System.EventHandler(this.stkTxtBx_Enter);
             this.stkTxtBx.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchTxtBx_KeyDown);
+            this.stkTxtBx.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MakeNewmericKeypress);
+            this.stkTxtBx.Leave += new System.EventHandler(this.stkTxtBx_Leave);
             // 
             // priceTxtBx
             // 
@@ -719,7 +738,10 @@ namespace TheServer
             this.priceTxtBx.Size = new System.Drawing.Size(190, 23);
             this.priceTxtBx.TabIndex = 13;
             this.priceTxtBx.UseSystemPasswordChar = false;
+            this.priceTxtBx.Enter += new System.EventHandler(this.priceTxtBx_Enter);
             this.priceTxtBx.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchTxtBx_KeyDown);
+            this.priceTxtBx.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MakeNewmericKeypress);
+            this.priceTxtBx.Leave += new System.EventHandler(this.priceTxtBx_Leave);
             // 
             // usernameTxtBx
             // 

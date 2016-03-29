@@ -31,12 +31,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClientPage));
             this.ConnectBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.LogLstBx = new System.Windows.Forms.ListBox();
             this.MsgTxtBx = new System.Windows.Forms.TextBox();
             this.SendBtn = new System.Windows.Forms.Button();
             this.InsrtBtn = new System.Windows.Forms.Button();
             this.rmvBtn = new System.Windows.Forms.Button();
             this.insrtLbl = new System.Windows.Forms.Label();
+            this.txtLog = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // ConnectBtn
@@ -63,23 +63,13 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "The Device";
             // 
-            // LogLstBx
-            // 
-            this.LogLstBx.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.LogLstBx.FormattingEnabled = true;
-            this.LogLstBx.HorizontalScrollbar = true;
-            this.LogLstBx.Location = new System.Drawing.Point(22, 161);
-            this.LogLstBx.Name = "LogLstBx";
-            this.LogLstBx.Size = new System.Drawing.Size(437, 286);
-            this.LogLstBx.TabIndex = 2;
-            // 
             // MsgTxtBx
             // 
             this.MsgTxtBx.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.MsgTxtBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MsgTxtBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MsgTxtBx.Location = new System.Drawing.Point(28, 113);
             this.MsgTxtBx.Name = "MsgTxtBx";
-            this.MsgTxtBx.Size = new System.Drawing.Size(418, 16);
+            this.MsgTxtBx.Size = new System.Drawing.Size(418, 31);
             this.MsgTxtBx.TabIndex = 3;
             this.MsgTxtBx.Text = "Message...";
             this.MsgTxtBx.Click += new System.EventHandler(this.MsgTxtBx_Click);
@@ -138,23 +128,33 @@
             this.insrtLbl.TabIndex = 6;
             this.insrtLbl.Text = "Insert";
             // 
+            // txtLog
+            // 
+            this.txtLog.Location = new System.Drawing.Point(28, 166);
+            this.txtLog.Multiline = true;
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtLog.Size = new System.Drawing.Size(431, 305);
+            this.txtLog.TabIndex = 7;
+            // 
             // ClientPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::TheClient.Properties.Resources.w;
             this.ClientSize = new System.Drawing.Size(803, 483);
+            this.Controls.Add(this.txtLog);
             this.Controls.Add(this.insrtLbl);
             this.Controls.Add(this.rmvBtn);
             this.Controls.Add(this.InsrtBtn);
             this.Controls.Add(this.SendBtn);
-            this.Controls.Add(this.LogLstBx);
             this.Controls.Add(this.MsgTxtBx);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ConnectBtn);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ClientPage";
             this.Text = "The Device";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClientPage_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -164,12 +164,12 @@
 
         private System.Windows.Forms.Button ConnectBtn;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ListBox LogLstBx;
         private System.Windows.Forms.TextBox MsgTxtBx;
         private System.Windows.Forms.Button SendBtn;
         private System.Windows.Forms.Button InsrtBtn;
         private System.Windows.Forms.Button rmvBtn;
         private System.Windows.Forms.Label insrtLbl;
+        private System.Windows.Forms.TextBox txtLog;
     }
 }
 
